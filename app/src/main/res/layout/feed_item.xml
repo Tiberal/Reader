@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp" >
+
+        <TextView
+            android:id="@+id/tvStoryNumberAndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="numb_date"
+            android:textColor="#424242"
+            android:textSize="11dp" />
+
+        <TextView
+            android:id="@+id/tvStory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvStoryNumberAndDate"
+            android:layout_below="@+id/tvStoryNumberAndDate"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:text="story"
+            android:textColor="#2a2a2a"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tvTags"
+            android:autoLink="web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvStory"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:text="tags"
+            android:textColor="#424242"
+            android:textSize="11dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#808080"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/tvStory"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/view"></View>
+
+        <TextView
+            android:id="@+id/tvRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="rate"
+            android:textColor="#2a2a2a"
+            android:textSize="20dp"
+            android:layout_alignTop="@+id/ibGood"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:id="@+id/ibBad"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvStory"
+            android:src="@drawable/ic_launcher" />
+
+        <ImageButton
+            android:id="@+id/ibGood"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tvStory"
+            android:src="@drawable/ic_launcher" />
+
+    </RelativeLayout>
+</LinearLayout>

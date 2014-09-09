@@ -9,6 +9,7 @@ public class PageInfo {
 
     private static PageInfo instance;
     private ArrayList<StoryInfo> storyInfos=null;
+    private ArrayList<TagInfo> tagInfos = null;
     private String currentPage;
     private String maxPageNumber;
     private String currentPageNumber;
@@ -40,6 +41,15 @@ public class PageInfo {
         for(StoryInfo storyInfo:data){
             storyInfos.add(storyInfo);
         }
+    }
+
+
+    public ArrayList<TagInfo> getTagInfos() {
+        return tagInfos;
+    }
+
+    public void setTagInfos(ArrayList<TagInfo> tagInfos) {
+        this.tagInfos = tagInfos;
     }
 
     public String getCurrentPage() {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by oleg on 04.09.14.
  */
-public class LoadersControl implements LoaderManager.LoaderCallbacks<ArrayList<StoryInfo>> {
+public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
 
     private FeedListView feedListView;
     private Context context;
@@ -26,23 +26,22 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<ArrayList<S
     }
 
     @Override
-    public Loader<ArrayList<StoryInfo>> onCreateLoader(int id, Bundle bundle) {
+    public Loader<Boolean> onCreateLoader(int id, Bundle bundle) {
         link = bundle.getString("URL");
         return new ItHappensLoader(context,link);
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<StoryInfo>> loader, final ArrayList<StoryInfo> data) {
-        if (PageInfo.getInstance().getStoryInfos()==null){
-            PageInfo.getInstance().setStoryInfos(data);
-        }else {
-            PageInfo.getInstance().addStoryInfos(data);
+    public void onLoadFinished(Loader<Boolean> loader, final Boolean data) {
+        if(data){
+            setFeedListViewData();
+            ((MainActivity)context).anotherContent(PageInfo.getInstance().getTagInfos());
         }
-        setFeedListViewData();
+
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<StoryInfo>> loader) {
+    public void onLoaderReset(Loader<Boolean> loader) {
 
     }
 

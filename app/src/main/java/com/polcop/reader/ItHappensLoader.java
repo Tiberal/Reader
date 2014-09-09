@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 /**
  * Created by oleg on 04.09.14.
  */
-public class ItHappensLoader extends AsyncTaskLoader<ArrayList<StoryInfo>> {
+public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
 
     private String link;
 
@@ -47,7 +47,7 @@ public class ItHappensLoader extends AsyncTaskLoader<ArrayList<StoryInfo>> {
     }
 
     @Override
-    public ArrayList<StoryInfo> loadInBackground() {
+    public Boolean loadInBackground() {
         ArrayList<StoryInfo> storyInfos = new ArrayList<StoryInfo>();
         ArrayList<TagInfo> tagInfos = new ArrayList<TagInfo>();
         try {
@@ -75,19 +75,25 @@ public class ItHappensLoader extends AsyncTaskLoader<ArrayList<StoryInfo>> {
                 storyBuilder.setRate(element.select("div.rating").text());
                 storyBuilder.setStoryNumber(element.select(".id").text() + " ");
                 storyBuilder.setTags(getHtmlLinkArray(element));
-                //storyBuilder.setTags(element.select(".tags").text());
                 storyBuilder.setStory(Html.fromHtml(element.select(".text").html()));
                 storyInfos.add(storyBuilder.build());
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
-        return storyInfos;
+        if (PageInfo.getInstance().getStoryInfos()==null){
+            PageInfo.getInstance().setStoryInfos(storyInfos);
+        }else {
+            PageInfo.getInstance().addStoryInfos(storyInfos);
+        }
+        PageInfo.getInstance().setTagInfos(tagInfos);
+        return true;
     }
 
     private String getPreviousPageNumber(Document document){
         String s = document.select("li.prev").get(1).text();
-        return s;//.substring(s.indexOf("–")+1,s.indexOf("–")+5);
+        return s;
     }
 
     private String[] getHtmlLinkArray (Element element){

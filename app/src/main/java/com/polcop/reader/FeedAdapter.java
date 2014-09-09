@@ -10,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
@@ -19,17 +23,30 @@ import java.util.zip.Inflater;
  */
 public class FeedAdapter extends BaseAdapter {
 
+    private Context context;
     private ArrayList<StoryInfo> storyInfos;
+    private ArrayList<ClickInfo> clickInfos;
     private LayoutInflater inflater;
+    private View.OnClickListener listener;
 
     public FeedAdapter(Context context, ArrayList<StoryInfo>storyInfos) {
+        this.context=context;
         this.storyInfos=storyInfos;
+        clickInfos = new ArrayList<ClickInfo>();
         inflater = (LayoutInflater) context
                 .getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
     public void updateData(ArrayList<StoryInfo> storyInfos) {
         this.storyInfos=storyInfos;
+        updateClickInfos();
+    }
+
+    private void updateClickInfos() {
+        int size = storyInfos.size() - clickInfos.size();
+        for (int i = 0; i < size; i++) {
+            clickInfos.add(new ClickInfo());
+        }
     }
 
     static class ViewHolder {
@@ -39,6 +56,11 @@ public class FeedAdapter extends BaseAdapter {
         public ImageButton ibBad;
         public TextView tvTags;
         public TextView tvRate;
+    }
+
+    static  class ClickInfo{
+        public boolean isGoodClicked = false;
+        public boolean isBadClicked = false;
     }
 
     @Override
@@ -86,7 +108,67 @@ public class FeedAdapter extends BaseAdapter {
         viewHolder.tvTags.setText(storyInfos.get(position).getSpannedTags());
         viewHolder.tvRate.setText(storyInfos.get(position).getRate());
         viewHolder.tvStory.setText(storyInfos.get(position).getStory());
+        createClickListener(viewHolder,position);
+        setRate(viewHolder,position);
+        viewHolder.ibBad.setOnClickListener(listener);
+        viewHolder.ibGood.setOnClickListener(listener);
         return view;
+    }
+
+    private void setRate(ViewHolder viewHolder, int position) {
+        viewHolder.ibBad.setVisibility(View.INVISIBLE);
+        viewHolder.ibGood.setVisibility(View.VISIBLE);
+        if(storyInfos.get(position).getGoodURL().equals("")){
+            viewHolder.ibGood.setVisibility(View.INVISIBLE);
+            return;
+        }
+        if(clickInfos.get(position).isGoodClicked)
+            goodClick(viewHolder,position);
+    }
+
+    private void createClickListener(final ViewHolder viewHolder, final int position){
+        this.listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.ibGood:
+                        goodClick(viewHolder,position);
+                        if(!(storyInfos.get(position).getGoodURL().equals(""))){
+                            postData(storyInfos.get(position).getGoodURL());
+                    }
+                }
+            }
+        };
+    }
+
+    private void goodClick(ViewHolder viewHolder, int position) {
+        clickInfos.get(position).isGoodClicked=true;
+        int rate = Integer.parseInt(storyInfos.get(position).getRate());
+        rate++;
+        viewHolder.tvRate.setText(""+rate);
+        viewHolder.ibGood.setVisibility(View.INVISIBLE);
+    }
+
+    private void badClick(ViewHolder viewHolder, int position) {
+        clickInfos.get(position).isBadClicked=true;
+        int rate = Integer.parseInt(storyInfos.get(position).getRate());
+        rate--;
+        viewHolder.tvRate.setText(""+rate);
+        viewHolder.ibBad.setVisibility(View.INVISIBLE);
+    }
+
+    public void postData(final String link){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Jsoup.connect(link).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 
 }

@@ -2,17 +2,20 @@ package com.polcop.reader;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.Html;
+import android.text.Spanned;
 
 /**
  * Created by oleg on 04.09.14.
  */
 public class StoryInfo implements Parcelable{
 
-    private String storyNumber, publishDate, tags, rate, goodURL, badURL, story;
-    //private Spanned story;
+    private String storyNumber, publishDate, rate, goodURL, badURL;//, story;
+    private String[] tags;
+    private Spanned story;
 
-    private StoryInfo(String storyNumber, String publishDate, String tags,
-                      String story, String rate, String goodURL ,String badURL) {
+    private StoryInfo(String storyNumber, String publishDate, String[] tags,
+                      Spanned story, String rate, String goodURL ,String badURL) {
         this.storyNumber = storyNumber;
         this.publishDate = publishDate;
         this.tags = tags;
@@ -25,8 +28,8 @@ public class StoryInfo implements Parcelable{
     public StoryInfo(Parcel parcel) {
         this.storyNumber = parcel.readString();
         this.publishDate = parcel.readString();
-        this.tags = parcel.readString();
-        this.story = parcel.readString();
+        this.tags = parcel.createStringArray();
+        this.story = Html.fromHtml(parcel.readString());
         this.rate = parcel.readString();
         this.goodURL = parcel.readString();
         this.badURL = parcel.readString();
@@ -41,8 +44,8 @@ public class StoryInfo implements Parcelable{
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(storyNumber);
         parcel.writeString(publishDate);
-        parcel.writeString(tags);
-        parcel.writeString(story);
+        parcel.writeStringArray(tags);
+        parcel.writeString(story.toString());
         parcel.writeString(rate);
         parcel.writeString(goodURL);
         parcel.writeString(badURL);
@@ -64,8 +67,9 @@ public class StoryInfo implements Parcelable{
 
     public static class Builder {
 
-        private String storyNumber, publishDate, tags, rate, goodURL, badURL;
-        private String story;
+        private String storyNumber, publishDate, rate, goodURL, badURL;
+        String[] tags;
+        private Spanned story;
 
         public void setStoryNumber(String storyNumber) {
             this.storyNumber = storyNumber;
@@ -75,11 +79,11 @@ public class StoryInfo implements Parcelable{
             this.publishDate = publishDate;
         }
 
-        public void setTags(String tags) {
+        public void setTags(String[] tags) {
             this.tags = tags;
         }
 
-        public void setStory(String story) {
+        public void setStory(Spanned story) {
             this.story = story;
         }
 
@@ -108,11 +112,11 @@ public class StoryInfo implements Parcelable{
         return publishDate;
     }
 
-    public String getTags() {
+    public String[] getTags() {
         return tags;
     }
 
-    public String getStory() {
+    public Spanned getStory() {
         return story;
     }
 
@@ -126,6 +130,17 @@ public class StoryInfo implements Parcelable{
 
     public String getBadURL() {
         return badURL;
+    }
+
+    public Spanned getSpannedTags(){
+        if(getTags()==null){
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i=0;i<getTags().length;i++){
+            sb.append(getTags()[i]).append(" ");
+        }
+        return Html.fromHtml(sb.toString());
     }
 
 }

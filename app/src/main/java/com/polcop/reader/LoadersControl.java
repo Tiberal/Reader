@@ -4,6 +4,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+
 import java.util.ArrayList;
 
 /**
@@ -11,12 +13,14 @@ import java.util.ArrayList;
  */
 public class LoadersControl implements LoaderManager.LoaderCallbacks<ArrayList<StoryInfo>> {
 
+    private FeedListView feedListView;
     private Context context;
     private FeedAdapter feedAdapter;
     private String link;
 
     public LoadersControl(Context context, FeedListView feedListView) {
         this.context = context;
+        this.feedListView=feedListView;
         feedAdapter = new FeedAdapter(context,PageInfo.getInstance().getStoryInfos());
         feedListView.setAdapter(feedAdapter);
     }
@@ -46,6 +50,8 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<ArrayList<S
         ((MainActivity)context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                feedListView.setLoadContent(false);
+                feedListView.setVisibility(View.VISIBLE);
                 feedAdapter.updateData(PageInfo.getInstance().getStoryInfos());
                 feedAdapter.notifyDataSetChanged();
                 }

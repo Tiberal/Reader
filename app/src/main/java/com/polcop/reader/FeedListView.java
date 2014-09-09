@@ -6,6 +6,8 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * Created by oleg on 03.09.14.
  */
@@ -31,8 +33,9 @@ public class FeedListView extends ListView {
     }
 
     private void init() {
-        isLoadContent = false;
+        isLoadContent = true;
         addFooterView(new LoadingFooterView(getContext()));
+        this.setVisibility(INVISIBLE);
         super.setOnScrollListener(new OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -44,7 +47,7 @@ public class FeedListView extends ListView {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 int lastVisibleItem = firstVisibleItem + visibleItemCount;
-                if (totalItemCount > 0 && !isLoadContent && ((lastVisibleItem == totalItemCount))) {
+                if (totalItemCount > 0 && !isLoadContent() && (lastVisibleItem == totalItemCount)) {
                     Toast.makeText(getContext(), "Loading", Toast.LENGTH_SHORT).show();
                     pagination.onLoadContent();
                 }

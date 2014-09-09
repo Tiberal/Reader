@@ -1,6 +1,9 @@
 package com.polcop.reader;
 
 import android.content.Context;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +82,11 @@ public class FeedAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+        viewHolder.tvStoryNumberAndDate.setText(storyInfos.get(position).getStoryNumber()+storyInfos.get(position).getPublishDate());
+        viewHolder.tvTags.setText(storyInfos.get(position).getSpannedTags());
+        viewHolder.tvRate.setText(storyInfos.get(position).getRate());
         viewHolder.tvStory.setText(storyInfos.get(position).getStory());
         return view;
     }
+
 }

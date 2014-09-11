@@ -96,10 +96,8 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
     }
 
     private boolean isMainLink(String link, ArrayList<TagInfo> tagInfos){
-        String s = link.substring(link.lastIndexOf("/"));
         for(TagInfo tagInfo: tagInfos){
             if(link.equals(tagInfo.getTagURL())){
-                //todo не подходит ссылка на тег всеравно будет в адресе.поиск последнего слэша.
                 return true;
             }
         }

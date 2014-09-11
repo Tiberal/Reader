@@ -16,6 +16,7 @@ public class FeedListView extends ListView {
     private boolean isLoadContent;
     private OnScrollListener onScrollListener;
     private Pagination pagination;
+    private LoadingFooterView loadingFooterView;
 
     public interface Pagination{
         public void onLoadContent();
@@ -34,7 +35,8 @@ public class FeedListView extends ListView {
 
     private void init() {
         isLoadContent = true;
-        //addFooterView(new LoadingFooterView(getContext()));
+        loadingFooterView = new LoadingFooterView(getContext());
+        addFooterView(loadingFooterView);
         this.setVisibility(INVISIBLE);
         super.setOnScrollListener(new OnScrollListener() {
             @Override
@@ -49,6 +51,8 @@ public class FeedListView extends ListView {
                 int lastVisibleItem = firstVisibleItem + visibleItemCount;
                 if (totalItemCount > 0 && !isLoadContent() && (lastVisibleItem == totalItemCount)) {
                     Toast.makeText(getContext(), "Loading", Toast.LENGTH_SHORT).show();
+                    if(PageInfo.getInstance().getPreviousPage()==null)
+                        removeFooterView(loadingFooterView);
                     pagination.onLoadContent();
                 }
             }

@@ -24,7 +24,6 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
         this.feedListView=feedListView;
         this.footerView = new LoadingFooterView(context);
         feedAdapter = new FeedAdapter(context,PageInfo.getInstance().getStoryInfos());
-        feedListView.setAdapter(feedAdapter);
     }
 
     @Override
@@ -53,15 +52,13 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
             public void run() {
                 feedListView.setLoadContent(false);
                 feedListView.setVisibility(View.VISIBLE);
+                if (feedListView.getAdapter()==null){
+                    //устанавливает адаптер один раз, после первой загрузки контента лодером
+                    feedListView.setAdapter(feedAdapter);
+                }
                 feedAdapter.updateData(PageInfo.getInstance().getStoryInfos());
                 feedAdapter.notifyDataSetChanged();
-                //todo танцы с бубном футер
-                if(PageInfo.getInstance().getPreviousPage()==null){
-                    feedListView.removeFooterView(footerView);
-                }else{
-                    feedListView.addFooterView(footerView);
-                }
-                }
+            }
         });
     }
 

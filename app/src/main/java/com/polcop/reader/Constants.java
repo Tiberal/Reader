@@ -4,6 +4,9 @@ package com.polcop.reader;
  * Created by oleg on 08.09.14.
  */
 public class Constants {
+    public static final String FEED_TAG = "feed";
+    public static final String CONTENT_KEY = "content";
+    public static final String ID_KEY = "id";
     public static final String IT_HAPPENS_TAG = "http://ithappens.me/tags";
     public static final String IT_HAPPENS_LINK = "http://ithappens.me";
     public static final String IT_HAPPENS_BEST = "http://ithappens.me/best";

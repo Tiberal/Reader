@@ -23,6 +23,7 @@ public class Feed extends Fragment {
         listView.setDivider(new ColorDrawable(Color.parseColor("#a4a4a4")));
         listView.setDividerHeight(10);
         loadersControl = new LoadersControl(getActivity(),getListView());
+        //todo лодер контрол сделать в единственно экземпляре
         listView.setPagination(new FeedListView.Pagination() {
             @Override
             public void onLoadContent() {
@@ -35,7 +36,8 @@ public class Feed extends Fragment {
 
             }
         });
-        loadData(Constants.IT_HAPPENS_LINK,Constants.IT_HAPPENS_LOADER);
+        Bundle arg = getArguments();
+        loadData(arg.getString(Constants.CONTENT_KEY),arg.getInt(Constants.ID_KEY));
         return view;
     }
 

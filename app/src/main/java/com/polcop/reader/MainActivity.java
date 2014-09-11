@@ -50,10 +50,8 @@ public class MainActivity extends ActionBarActivity {
             //первый запуск
             PageInfo.initInstance();
             PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
-            feed = new Feed();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, feed, "feed")
-                    .commit();
+            //надо будет перекинуть в навигацию по списку экшн бара
+            switchContent(Constants.IT_HAPPENS_LINK,Constants.IT_HAPPENS_LOADER);
         }
     }
 
@@ -103,8 +101,6 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            //PageInfo.getInstance().resetPager();
-            //PageInfo.getInstance().setMaxPageMark(true);
             int loaderId = 103;//getLoaderId();
             switch (loaderId){
                 case Constants.IT_HAPPENS_LOADER:
@@ -135,21 +131,36 @@ public class MainActivity extends ActionBarActivity {
             switch (childPosition){
                 case 0:
                     //PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
-                    feed.loadData(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
+                    switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
                     break;
                 case 1:
                     //PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_BEST);
-                    feed.loadData(Constants.IT_HAPPENS_BEST, Constants.IT_HAPPENS_LOADER);
+                    switchContent(Constants.IT_HAPPENS_BEST, Constants.IT_HAPPENS_LOADER);
                     break;
                 case 2:
                     //PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_RANDOM);
-                    feed.loadData(Constants.IT_HAPPENS_RANDOM, Constants.IT_HAPPENS_LOADER);
+                    switchContent(Constants.IT_HAPPENS_RANDOM, Constants.IT_HAPPENS_LOADER);
                     break;
             }
         }else if (groupPosition==1){
             ArrayList<TagInfo> tagInfos = PageInfo.getInstance().getTagInfos();
             PageInfo.getInstance().setCurrentPage(tagInfos.get(childPosition).getTagURL());
-            feed.loadData(tagInfos.get(childPosition).getTagURL(), Constants.IT_HAPPENS_LOADER);
+            switchContent(tagInfos.get(childPosition).getTagURL(), Constants.IT_HAPPENS_LOADER);
         }
     }
+
+    private void switchContent(String link, int id){
+       if (feed!=null){
+            getSupportFragmentManager().beginTransaction().remove(feed);
+        }
+        feed = new Feed();
+        Bundle arg = new Bundle();
+        arg.putString(Constants.CONTENT_KEY, link);
+        arg.putInt(Constants.ID_KEY,id);
+        feed.setArguments(arg);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, feed, Constants.FEED_TAG)
+                .commit();
+    }
+
 }

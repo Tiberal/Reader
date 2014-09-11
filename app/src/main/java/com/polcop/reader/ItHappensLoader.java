@@ -5,6 +5,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -60,7 +61,7 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
                 Element element1 = element.child(0);
                 tagBuilder.setHtmlTag(element1.outerHtml());// Html.fromHtml(element1.html());
                 tagBuilder.setTagName(element.text());
-                tagBuilder.setTagURL(element.child(0).attr("href"));
+                tagBuilder.setTagURL(Constants.IT_HAPPENS_LINK + element.child(0).attr("href"));
                 tagBuilder.setTotal(Integer.parseInt(element.attr("data-count")));
                 tagInfos.add(tagBuilder.build());
             }
@@ -82,6 +83,9 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
             e.printStackTrace();
             return false;
         }
+        if (isMainLink(link,tagInfos)){
+            PageInfo.getInstance().setStoryInfos(null);
+        }
         if (PageInfo.getInstance().getStoryInfos()==null){
             PageInfo.getInstance().setStoryInfos(storyInfos);
         }else {
@@ -91,9 +95,26 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
         return true;
     }
 
+    private boolean isMainLink(String link, ArrayList<TagInfo> tagInfos){
+        String s = link.substring(link.lastIndexOf("/"));
+        for(TagInfo tagInfo: tagInfos){
+            if(link.equals(tagInfo.getTagURL())){
+                //todo не подходит ссылка на тег всеравно будет в адресе.поиск последнего слэша.
+                return true;
+            }
+        }
+        if (link.equals(Constants.IT_HAPPENS_LINK)) return true;
+        if(link.equals(Constants.IT_HAPPENS_BEST)) return true;
+        if(link.equals(Constants.IT_HAPPENS_RANDOM)) return true;
+        return false;
+    }
+
     private String getPreviousPageNumber(Document document){
-        String s = document.select("li.prev").get(1).text();
-        return s;
+        try {
+            return document.select("li.prev").get(1).text();
+        }catch (IndexOutOfBoundsException e){
+           return null;
+        }
     }
 
     private String[] getHtmlLinkArray (Element element){

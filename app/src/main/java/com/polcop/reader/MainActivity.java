@@ -3,6 +3,7 @@ package com.polcop.reader;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +21,7 @@ public class MainActivity extends ActionBarActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private ExpandableListView drawerExpandableListView;
+    private Feed feed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +47,12 @@ public class MainActivity extends ActionBarActivity {
         };
         drawerLayout.setDrawerListener(drawerToggle);
         if (savedInstanceState == null) {
+            //первый запуск
             PageInfo.initInstance();
+            PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+            feed = new Feed();
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, new Feed())
+                    .add(R.id.container, feed, "feed")
                     .commit();
         }
     }
@@ -103,6 +108,7 @@ public class MainActivity extends ActionBarActivity {
             int loaderId = 103;//getLoaderId();
             switch (loaderId){
                 case Constants.IT_HAPPENS_LOADER:
+                    itHappensClick(groupPosition,childPosition);
                     //todo click listener
                     break;
                 case Constants.ZADOLBALI_LOADER:
@@ -124,4 +130,26 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    private void itHappensClick(int groupPosition, int childPosition){
+        if (groupPosition==0){
+            switch (childPosition){
+                case 0:
+                    //PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                    feed.loadData(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
+                    break;
+                case 1:
+                    //PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_BEST);
+                    feed.loadData(Constants.IT_HAPPENS_BEST, Constants.IT_HAPPENS_LOADER);
+                    break;
+                case 2:
+                    //PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_RANDOM);
+                    feed.loadData(Constants.IT_HAPPENS_RANDOM, Constants.IT_HAPPENS_LOADER);
+                    break;
+            }
+        }else if (groupPosition==1){
+            ArrayList<TagInfo> tagInfos = PageInfo.getInstance().getTagInfos();
+            PageInfo.getInstance().setCurrentPage(tagInfos.get(childPosition).getTagURL());
+            feed.loadData(tagInfos.get(childPosition).getTagURL(), Constants.IT_HAPPENS_LOADER);
+        }
+    }
 }

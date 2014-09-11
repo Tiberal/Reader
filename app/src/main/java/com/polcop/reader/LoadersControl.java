@@ -17,10 +17,12 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
     private Context context;
     private FeedAdapter feedAdapter;
     private String link;
+    private LoadingFooterView footerView;
 
     public LoadersControl(Context context, FeedListView feedListView) {
         this.context = context;
         this.feedListView=feedListView;
+        this.footerView = new LoadingFooterView(context);
         feedAdapter = new FeedAdapter(context,PageInfo.getInstance().getStoryInfos());
         feedListView.setAdapter(feedAdapter);
     }
@@ -53,6 +55,12 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
                 feedListView.setVisibility(View.VISIBLE);
                 feedAdapter.updateData(PageInfo.getInstance().getStoryInfos());
                 feedAdapter.notifyDataSetChanged();
+                //todo танцы с бубном футер
+                if(PageInfo.getInstance().getPreviousPage()==null){
+                    feedListView.removeFooterView(footerView);
+                }else{
+                    feedListView.addFooterView(footerView);
+                }
                 }
         });
     }

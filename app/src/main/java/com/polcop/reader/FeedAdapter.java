@@ -134,7 +134,7 @@ public class FeedAdapter extends BaseAdapter {
                     case R.id.ibGood:
                         goodClick(viewHolder,position);
                         if(!(storyInfos.get(position).getGoodURL().equals(""))){
-                            postData(storyInfos.get(position).getGoodURL());
+                            postData(Constants.IT_HAPPENS_LINK+storyInfos.get(position).getGoodURL());
                     }
                 }
             }

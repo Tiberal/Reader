@@ -34,7 +34,7 @@ public class FeedListView extends ListView {
 
     private void init() {
         isLoadContent = true;
-        addFooterView(new LoadingFooterView(getContext()));
+        //addFooterView(new LoadingFooterView(getContext()));
         this.setVisibility(INVISIBLE);
         super.setOnScrollListener(new OnScrollListener() {
             @Override

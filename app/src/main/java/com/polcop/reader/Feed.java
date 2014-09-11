@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 public class Feed extends Fragment {
 
     private FeedListView listView;
+    private LoadersControl loadersControl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -21,23 +22,31 @@ public class Feed extends Fragment {
         listView = (FeedListView) view.findViewById(R.id.feed_list);
         listView.setDivider(new ColorDrawable(Color.parseColor("#a4a4a4")));
         listView.setDividerHeight(10);
-        final LoadersControl loadersControl = new LoadersControl(getActivity(),getListView());
+        loadersControl = new LoadersControl(getActivity(),getListView());
         listView.setPagination(new FeedListView.Pagination() {
             @Override
             public void onLoadContent() {
-                Bundle bundle = new Bundle();
-                bundle.putString("URL","http://ithappens.me/page/"+PageInfo.getInstance().getPreviousPage());
-                getActivity().getSupportLoaderManager().restartLoader(1,bundle,loadersControl);
+                if(PageInfo.getInstance().getPreviousPage()==null) return;
+                if(PageInfo.getInstance().getCurrentPage().equals(Constants.IT_HAPPENS_LINK)){
+                    loadData("http://ithappens.me/page/"+PageInfo.getInstance().getPreviousPage(),Constants.IT_HAPPENS_LOADER);
+                }else{
+                    loadData(PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage(),Constants.IT_HAPPENS_LOADER);
+                }
+
             }
         });
-        Bundle bundle = new Bundle();
-        bundle.putString("URL","http://ithappens.me/");
-        getActivity().getSupportLoaderManager().restartLoader(1,bundle,loadersControl);
+        loadData(Constants.IT_HAPPENS_LINK,Constants.IT_HAPPENS_LOADER);
         return view;
     }
 
     public FeedListView getListView() {
         return listView;
+    }
+
+    public void loadData (String link, int loaderId){
+        Bundle bundle = new Bundle();
+        bundle.putString("URL",link);
+        getActivity().getSupportLoaderManager().restartLoader(loaderId,bundle,loadersControl);
     }
 
 }

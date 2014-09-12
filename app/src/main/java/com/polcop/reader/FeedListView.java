@@ -50,9 +50,10 @@ public class FeedListView extends ListView {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 int lastVisibleItem = firstVisibleItem + visibleItemCount;
                 if (totalItemCount > 0 && !isLoadContent() && (lastVisibleItem == totalItemCount)) {
-                    Toast.makeText(getContext(), "Loading", Toast.LENGTH_SHORT).show();
-                    if(PageInfo.getInstance().getPreviousPage()==null)
+                    if(PageInfo.getInstance().getPreviousPage()==null){
                         removeFooterView(loadingFooterView);
+                    }
+                    setLoadContent(true);
                     pagination.onLoadContent();
                 }
             }

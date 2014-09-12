@@ -1,10 +1,13 @@
 package com.polcop.reader;
 
 import android.content.Context;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.SpannedString;
+import android.text.Layout;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,7 +19,8 @@ import org.jsoup.Jsoup;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by oleg on 04.09.14.
@@ -108,7 +112,8 @@ public class FeedAdapter extends BaseAdapter {
         viewHolder.tvTags.setText(storyInfos.get(position).getSpannedTags());
         viewHolder.tvRate.setText(storyInfos.get(position).getRate());
         viewHolder.tvStory.setText(storyInfos.get(position).getStory());
-        createClickListener(viewHolder,position);
+        viewHolder.tvStory.setMovementMethod(new MovementCheck());
+        createClickListener(viewHolder, position);
         setRate(viewHolder,position);
         viewHolder.ibBad.setOnClickListener(listener);
         viewHolder.ibGood.setOnClickListener(listener);

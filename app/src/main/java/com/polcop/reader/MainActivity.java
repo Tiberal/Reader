@@ -4,6 +4,8 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.pdf.PdfDocument;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +14,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,6 +25,8 @@ public class MainActivity extends ActionBarActivity {
     private ActionBarDrawerToggle drawerToggle;
     private ExpandableListView drawerExpandableListView;
     private Feed feed;
+    private LoadingDialog loadingDialod;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,7 @@ public class MainActivity extends ActionBarActivity {
             PageInfo.initInstance();
             PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
             //надо будет перекинуть в навигацию по списку экшн бара
-            switchContent(Constants.IT_HAPPENS_LINK,Constants.IT_HAPPENS_LOADER);
+            switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
         }
     }
 
@@ -150,17 +155,42 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void switchContent(String link, int id){
+       drawerLayout.closeDrawers();
        if (feed!=null){
             getSupportFragmentManager().beginTransaction().remove(feed);
         }
-        feed = new Feed();
-        Bundle arg = new Bundle();
-        arg.putString(Constants.CONTENT_KEY, link);
-        arg.putInt(Constants.ID_KEY,id);
-        feed.setArguments(arg);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, feed, Constants.FEED_TAG)
-                .commit();
+       if(isOnline()){
+            loadingDialod = LoadingDialog.getDialod();
+            loadingDialod.show(getSupportFragmentManager(),"loading");
+            feed = new Feed();
+            Bundle arg = new Bundle();
+            arg.putString(Constants.CONTENT_KEY, link);
+            arg.putInt(Constants.ID_KEY,id);
+            feed.setArguments(arg);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, feed, Constants.FEED_TAG)
+                    .commit();
+       }else{
+           Toast.makeText(this,"no connect",Toast.LENGTH_SHORT).show();
+       }
+
+    }
+
+    public  void  dismissLoadingDialog(){
+        if(loadingDialod!=null){
+            getSupportFragmentManager().beginTransaction().remove(loadingDialod).commitAllowingStateLoss();
+            loadingDialod = null;
+        }
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 
 }

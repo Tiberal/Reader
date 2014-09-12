@@ -50,6 +50,7 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
         ((MainActivity)context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                ((MainActivity) context).dismissLoadingDialog();
                 feedListView.setLoadContent(false);
                 feedListView.setVisibility(View.VISIBLE);
                 if (feedListView.getAdapter()==null){

@@ -67,6 +67,11 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
             }
             document = Jsoup.connect(link).timeout(10000).get();
             elements =document.select("div.content").select(".story");
+
+            //название истории
+            String storyName = elements.get(0).children().get(1).text();
+
+
             PageInfo.getInstance().setPreviousPage(getPreviousPageNumber(document));
             StoryInfo.Builder storyBuilder=new StoryInfo.Builder();
             for (Element element:elements){

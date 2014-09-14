@@ -3,6 +3,8 @@ package com.polcop.reader;
 import android.content.Context;
 import android.text.Layout;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.view.KeyEvent;
@@ -54,7 +56,8 @@ public class FeedAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        public TextView tvStoryNumberAndDate;
+        public TextView tvStoryNumber;
+        public TextView tvStoryDate;
         public TextView tvStory;
         public ImageButton ibGood;
         public ImageButton ibBad;
@@ -91,12 +94,15 @@ public class FeedAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
+        MovementCheck movementCheck = new MovementCheck(context);
         View view = convertView;
         if (convertView == null) {
             view = inflater.inflate(R.layout.feed_item, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.tvStoryNumberAndDate = (TextView) view
-                    .findViewById(R.id.tvStoryNumberAndDate);
+            viewHolder.tvStoryNumber = (TextView) view
+                    .findViewById(R.id.tvStoryNumber);
+            viewHolder.tvStoryDate = (TextView) view
+                    .findViewById(R.id.tvStoryDate);
             viewHolder.tvStory = (TextView) view.findViewById(R.id.tvStory);
             viewHolder.ibGood = (ImageButton) view.findViewById(R.id.ibGood);
             viewHolder.ibGood.setFocusable(false);
@@ -108,16 +114,27 @@ public class FeedAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.tvStoryNumberAndDate.setText(storyInfos.get(position).getStoryNumber()+storyInfos.get(position).getPublishDate());
+        viewHolder.tvStoryNumber.setText(storyInfos.get(position).getStoryNumber());
+        viewHolder.tvStoryDate.setText(storyInfos.get(position).getPublishDate());
         viewHolder.tvTags.setText(storyInfos.get(position).getSpannedTags());
+        //viewHolder.tvTags.setMovementMethod(movementCheck);
         viewHolder.tvRate.setText(storyInfos.get(position).getRate());
-        viewHolder.tvStory.setText(storyInfos.get(position).getStory());
-        viewHolder.tvStory.setMovementMethod(new MovementCheck());
+        viewHolder.tvStory.setText(createSpannableStory(position));
+        viewHolder.tvStory.setMovementMethod(movementCheck);
         createClickListener(viewHolder, position);
         setRate(viewHolder,position);
         viewHolder.ibBad.setOnClickListener(listener);
         viewHolder.ibGood.setOnClickListener(listener);
         return view;
+    }
+
+
+    //совмещает низвание истории и историю
+    private SpannableStringBuilder createSpannableStory(int position){
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(storyInfos.get(position).getStoryName());
+        builder.append(storyInfos.get(position).getStory());
+        return builder;
     }
 
     private void setRate(ViewHolder viewHolder, int position) {

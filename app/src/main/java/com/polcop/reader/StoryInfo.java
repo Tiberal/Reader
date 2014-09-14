@@ -10,12 +10,12 @@ import android.text.Spanned;
  */
 public class StoryInfo implements Parcelable{
 
-    private String storyNumber, publishDate, rate, goodURL, badURL;//, story;
+    private String storyNumber, publishDate, rate, goodURL, badURL, storyName;
     private String[] tags;
     private Spanned story;
 
     private StoryInfo(String storyNumber, String publishDate, String[] tags,
-                      Spanned story, String rate, String goodURL ,String badURL) {
+                      Spanned story, String rate, String goodURL ,String badURL, String storyName) {
         this.storyNumber = storyNumber;
         this.publishDate = publishDate;
         this.tags = tags;
@@ -23,6 +23,7 @@ public class StoryInfo implements Parcelable{
         this.rate = rate;
         this.goodURL = goodURL;
         this.badURL = badURL;
+        this.storyName = storyName;
     }
 
     public StoryInfo(Parcel parcel) {
@@ -33,6 +34,7 @@ public class StoryInfo implements Parcelable{
         this.rate = parcel.readString();
         this.goodURL = parcel.readString();
         this.badURL = parcel.readString();
+        this.storyName = parcel.readString();
     }
 
     @Override
@@ -49,6 +51,7 @@ public class StoryInfo implements Parcelable{
         parcel.writeString(rate);
         parcel.writeString(goodURL);
         parcel.writeString(badURL);
+        parcel.writeString(storyName);
 
     }
 
@@ -67,7 +70,13 @@ public class StoryInfo implements Parcelable{
 
     public static class Builder {
 
-        private String storyNumber, publishDate, rate, goodURL, badURL;
+        private String storyNumber;
+        private String publishDate;
+        private String rate;
+        private String goodURL;
+        private String badURL;
+
+        private String storyName;
         String[] tags;
         private Spanned story;
 
@@ -99,8 +108,12 @@ public class StoryInfo implements Parcelable{
             this.badURL = badURL;
         }
 
+        public void setStoryName(String storyName) {
+            this.storyName = "<h1>"+storyName+"</h1>";
+        }
+
         public StoryInfo build() {
-            return new StoryInfo(storyNumber, publishDate, tags, story, rate, goodURL, badURL);
+            return new StoryInfo(storyNumber, publishDate, tags, story, rate, goodURL, badURL, storyName);
         }
     }
 
@@ -130,6 +143,10 @@ public class StoryInfo implements Parcelable{
 
     public String getBadURL() {
         return badURL;
+    }
+
+    public Spanned getStoryName() {
+        return Html.fromHtml(storyName);
     }
 
     public Spanned getSpannedTags(){

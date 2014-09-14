@@ -59,7 +59,7 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
             elements = document.select(".cloud").select("li");
             for (Element element:elements){
                 Element element1 = element.child(0);
-                tagBuilder.setHtmlTag(element1.outerHtml());// Html.fromHtml(element1.html());
+                tagBuilder.setHtmlTag(element1.outerHtml());
                 tagBuilder.setTagName(element.text());
                 tagBuilder.setTagURL(Constants.IT_HAPPENS_LINK + element.child(0).attr("href"));
                 tagBuilder.setTotal(Integer.parseInt(element.attr("data-count")));
@@ -67,11 +67,6 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
             }
             document = Jsoup.connect(link).timeout(10000).get();
             elements =document.select("div.content").select(".story");
-
-            //название истории
-            String storyName = elements.get(0).children().get(1).text();
-
-
             PageInfo.getInstance().setPreviousPage(getPreviousPageNumber(document));
             StoryInfo.Builder storyBuilder=new StoryInfo.Builder();
             for (Element element:elements){
@@ -79,9 +74,10 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
                 storyBuilder.setGoodURL(element.select("div.button-group.like").select("a.button").attr("href"));
                 storyBuilder.setPublishDate(element.select(".date-time").text());
                 storyBuilder.setRate(element.select("div.rating").text());
-                storyBuilder.setStoryNumber(element.select(".id").text() + " ");
+                storyBuilder.setStoryNumber("#" + element.select(".id").text());
                 storyBuilder.setTags(getHtmlLinkArray(element));
                 storyBuilder.setStory(Html.fromHtml(element.select(".text").html()));
+                storyBuilder.setStoryName(element.children().get(1).text());
                 storyInfos.add(storyBuilder.build());
             }
         } catch (IOException e) {

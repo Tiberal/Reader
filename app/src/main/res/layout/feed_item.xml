@@ -11,7 +11,7 @@
         android:layout_margin="15dp" >
 
         <TextView
-            android:id="@+id/tvStoryNumberAndDate"
+            android:id="@+id/tvStoryNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -20,37 +20,52 @@
             android:textSize="11dp" />
 
         <TextView
+            android:id="@+id/tvStoryDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="numb_date"
+            android:textColor="#424242"
+            android:textSize="11dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
             android:id="@+id/tvStory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tvStoryNumberAndDate"
-            android:layout_below="@+id/tvStoryNumberAndDate"
-            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:text="story"
             android:textColor="#2a2a2a"
-            android:textSize="14dp" />
+            android:textSize="14dp"
+            android:layout_below="@+id/tvTags"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/tvTags"
             android:autoLink="web"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/tvStory"
-            android:layout_alignParentRight="true"
             android:gravity="center_vertical"
             android:text="tags"
             android:textColor="#424242"
-            android:textSize="11dp" />
+            android:textSize="11dp"
+            android:layout_below="@+id/tvStoryNumber"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#808080"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/tvStory"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/view"></View>
+            android:id="@+id/view"
+            android:layout_above="@+id/tvRate"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"></View>
 
         <TextView
             android:id="@+id/tvRate"

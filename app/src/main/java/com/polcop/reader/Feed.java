@@ -15,6 +15,18 @@ public class Feed extends Fragment {
 
     private FeedListView listView;
     private LoadersControl loadersControl;
+    private boolean aBoolean = true;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,8 +48,18 @@ public class Feed extends Fragment {
 
             }
         });
-        Bundle arg = getArguments();
-        loadData(arg.getString(Constants.CONTENT_KEY),arg.getInt(Constants.ID_KEY));
+        if(aBoolean){
+            Bundle arg = getArguments();
+            loadData(arg.getString(Constants.CONTENT_KEY),arg.getInt(Constants.ID_KEY));
+            aBoolean=false;
+        }else{
+            //отобразить ленту там, где был переход по ссылке
+            FeedAdapter  adapter = new FeedAdapter(getActivity(),null);
+            listView.setAdapter(adapter);
+            listView.setVisibility(View.VISIBLE);
+            adapter.updateData(PageInfo.getInstance().getStoryInfos());
+            adapter.notifyDataSetChanged();
+        }
         return view;
     }
 

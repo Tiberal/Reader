@@ -5,7 +5,7 @@ package com.polcop.reader;
  */
 public class Constants {
     public static final String FEED_TAG = "feed";
-    public static final String CONTENT_KEY = "content";
+    public static final String LINK = "link";
     public static final String ID_KEY = "id";
     public static final String IT_HAPPENS_TAG = "http://ithappens.me/tags";
     public static final String IT_HAPPENS_LINK = "http://ithappens.me";
@@ -15,5 +15,6 @@ public class Constants {
     public static final int BASH_LOADER = 101;
     public static final int ZADOLBALI_LOADER = 102;
     public static final int IT_HAPPENS_LOADER = 103;
-
+    public static final String LOADER_ID = "loader_id";
+    public static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
 }

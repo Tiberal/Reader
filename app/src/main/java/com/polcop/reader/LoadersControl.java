@@ -17,12 +17,10 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
     private Context context;
     private FeedAdapter feedAdapter;
     private String link;
-    private LoadingFooterView footerView;
 
     public LoadersControl(Context context, FeedListView feedListView) {
         this.context = context;
         this.feedListView=feedListView;
-        this.footerView = new LoadingFooterView(context);
         feedAdapter = new FeedAdapter(context,PageInfo.getInstance().getStoryInfos());
     }
 
@@ -50,7 +48,7 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
         ((MainActivity)context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ((MainActivity) context).dismissLoadingDialog();
+                Utils.dismissLoadingDialog(context);
                 feedListView.setLoadContent(false);
                 feedListView.setVisibility(View.VISIBLE);
                 if (feedListView.getAdapter()==null){

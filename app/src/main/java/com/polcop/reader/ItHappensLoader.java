@@ -15,13 +15,15 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by oleg on 04.09.14.
  */
-public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
+public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Comparator<TagInfo> {
 
     private String link;
 
@@ -65,6 +67,7 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
                 tagBuilder.setTotal(Integer.parseInt(element.attr("data-count")));
                 tagInfos.add(tagBuilder.build());
             }
+            Collections.sort(tagInfos, this);
             document = Jsoup.connect(link).timeout(10000).get();
             elements =document.select("div.content").select(".story");
             PageInfo.getInstance().setPreviousPage(getPreviousPageNumber(document));
@@ -84,7 +87,7 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
             e.printStackTrace();
             return false;
         }
-        if (isMainLink(link,tagInfos)){
+        if (Utils.isMainLink(link, tagInfos)){
             PageInfo.getInstance().setStoryInfos(null);
         }
         if (PageInfo.getInstance().getStoryInfos()==null){
@@ -94,18 +97,6 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
         }
         PageInfo.getInstance().setTagInfos(tagInfos);
         return true;
-    }
-
-    private boolean isMainLink(String link, ArrayList<TagInfo> tagInfos){
-        for(TagInfo tagInfo: tagInfos){
-            if(link.equals(tagInfo.getTagURL())){
-                return true;
-            }
-        }
-        if (link.equals(Constants.IT_HAPPENS_LINK)) return true;
-        if(link.equals(Constants.IT_HAPPENS_BEST)) return true;
-        if(link.equals(Constants.IT_HAPPENS_RANDOM)) return true;
-        return false;
     }
 
     private String getPreviousPageNumber(Document document){
@@ -130,6 +121,13 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> {
         return list.toArray(new String[]{});
     }
 
+    @Override
+    public int compare(TagInfo lhs, TagInfo rhs) {
+        if (lhs.getTotal() > rhs.getTotal()){
+            return -1;
+        }else if (lhs.getTotal() < rhs.getTotal()){
+            return 1;
+        }else return 0;    }
 }
 
 

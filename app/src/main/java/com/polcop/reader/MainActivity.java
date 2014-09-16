@@ -1,11 +1,9 @@
 package com.polcop.reader;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.pdf.PdfDocument;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -25,7 +23,6 @@ public class MainActivity extends ActionBarActivity {
     private ActionBarDrawerToggle drawerToggle;
     private ExpandableListView drawerExpandableListView;
     private Feed feed;
-    private LoadingDialog loadingDialod;
 
 
     @Override
@@ -36,8 +33,9 @@ public class MainActivity extends ActionBarActivity {
         drawerExpandableListView = (ExpandableListView)findViewById(R.id.left_drawer);
         setActionBarOptions();
         drawerLayout.setDrawerListener(drawerToggle);
-        drawerExpandableListView.setOnChildClickListener(new DrawerItemClickListener());
-        drawerExpandableListView.setOnGroupClickListener(new DrawerItemClickListener());
+        DrawerItemClickListener drawerItemClickListener = new DrawerItemClickListener(this);
+        drawerExpandableListView.setOnChildClickListener(drawerItemClickListener);
+        drawerExpandableListView.setOnGroupClickListener(drawerItemClickListener);
         drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.drawable.ic_drawer,
                 R.string.drawer_open,R.string.drawer_close) {
             @Override
@@ -55,6 +53,7 @@ public class MainActivity extends ActionBarActivity {
             //первый запуск
             PageInfo.initInstance();
             PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+            Utils.setLoaderId(this,Constants.IT_HAPPENS_LOADER);
             //надо будет перекинуть в навигацию по списку экшн бара
             switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
         }
@@ -104,10 +103,15 @@ public class MainActivity extends ActionBarActivity {
     private class DrawerItemClickListener implements ExpandableListView.OnChildClickListener,
             ExpandableListView.OnGroupClickListener {
 
+        private Context context;
+
+        public DrawerItemClickListener(Context context) {
+            this.context = context;
+        }
+
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            int loaderId = 103;//getLoaderId();
-            switch (loaderId){
+            switch (Utils.getLoaderId(context)){
                 case Constants.IT_HAPPENS_LOADER:
                     itHappensClick(groupPosition,childPosition);
                     //todo click listener
@@ -159,38 +163,17 @@ public class MainActivity extends ActionBarActivity {
        if (feed!=null){
             getSupportFragmentManager().beginTransaction().remove(feed);
         }
-       if(isOnline()){
-            loadingDialod = LoadingDialog.getDialod();
-            loadingDialod.show(getSupportFragmentManager(),"loading");
+        Bundle arg = new Bundle();
+        arg.putString(Constants.LINK, link);
+        arg.putInt(Constants.ID_KEY,id);
+       if(Utils.isOnline(this)){
             feed = new Feed();
-            Bundle arg = new Bundle();
-            arg.putString(Constants.CONTENT_KEY, link);
-            arg.putInt(Constants.ID_KEY,id);
             feed.setArguments(arg);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, feed, Constants.FEED_TAG)
                     .commit();
        }else{
-           Toast.makeText(this,"no connect",Toast.LENGTH_SHORT).show();
+           Utils.showNoConnectionFragment(arg,this);
        }
-
     }
-
-    public  void  dismissLoadingDialog(){
-        if(loadingDialod!=null){
-            getSupportFragmentManager().beginTransaction().remove(loadingDialod).commitAllowingStateLoss();
-            loadingDialod = null;
-        }
-    }
-
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
-    }
-
 }

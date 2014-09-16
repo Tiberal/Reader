@@ -15,7 +15,8 @@ public class Feed extends Fragment {
 
     private FeedListView listView;
     private LoadersControl loadersControl;
-    private boolean aBoolean = true;
+    private boolean isFirstLoad = true;
+    private LoadingDialog loadingDialod;
 
 
     @Override
@@ -39,19 +40,30 @@ public class Feed extends Fragment {
         listView.setPagination(new FeedListView.Pagination() {
             @Override
             public void onLoadContent() {
-                if(PageInfo.getInstance().getPreviousPage()==null) return;
-                if(PageInfo.getInstance().getCurrentPage().equals(Constants.IT_HAPPENS_LINK)){
-                    loadData("http://ithappens.me/page/"+PageInfo.getInstance().getPreviousPage(),Constants.IT_HAPPENS_LOADER);
-                }else{
-                    loadData(PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage(),Constants.IT_HAPPENS_LOADER);
+                String loadLink;
+                if (PageInfo.getInstance().getCurrentPage().equals(Constants.IT_HAPPENS_LINK)){
+                    loadLink = "http://ithappens.me/page/"+PageInfo.getInstance().getPreviousPage();
+                }else {
+                    loadLink = PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage();
                 }
-
-            }
+                if(!Utils.isOnline(getActivity())){
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.LINK,loadLink);
+                    bundle.putInt(Constants.LOADER_ID,Constants.IT_HAPPENS_LOADER);
+                    Utils.showNoConnectionFragment(bundle,getActivity());
+                    return;
+                }
+                if(PageInfo.getInstance().getPreviousPage()==null) return;
+                loadData(loadLink,Utils.getLoaderId(getActivity()));
+                }
         });
-        if(aBoolean){
+        if(isFirstLoad){
+            //выполняется при создании фрагмента и первой загрузке
             Bundle arg = getArguments();
-            loadData(arg.getString(Constants.CONTENT_KEY),arg.getInt(Constants.ID_KEY));
-            aBoolean=false;
+            loadingDialod = LoadingDialog.getDialod();
+            loadingDialod.show(getActivity().getSupportFragmentManager(), Constants.LOADING_DIALOG_TAG);
+            loadData(arg.getString(Constants.LINK),arg.getInt(Constants.LOADER_ID));
+            isFirstLoad = false;
         }else{
             //отобразить ленту там, где был переход по ссылке
             FeedAdapter  adapter = new FeedAdapter(getActivity(),null);

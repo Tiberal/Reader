@@ -38,22 +38,38 @@ public class MovementCheck  extends LinkMovementMethod {
             Layout layout = widget.getLayout();
             int line = layout.getLineForVertical(y);
             int off = layout.getOffsetForHorizontal(line, x);
-            URLSpan[] link = buffer.getSpans(off, off, URLSpan.class);
-            if (link.length==0) return true;
-            String s = link[0].getURL();
+            URLSpan[] links = buffer.getSpans(off, off, URLSpan.class);
+            if (links.length==0) return true;
+            String link = links[0].getURL();
             Pattern pattern = Pattern.compile("^/story/[0-9]+$");
-            Matcher matcher = pattern.matcher(s);
+            Matcher matcher = pattern.matcher(link);
             if(matcher.matches()){
-                Toast.makeText(context, "link " + s, Toast.LENGTH_LONG).show();
-                SingleStoryFragment fragment = new SingleStoryFragment();
+                Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                showLoadingDialog();
+                SingleStoryFragment singleStoryFragment = new SingleStoryFragment();
                 Bundle arg = new Bundle();
-                arg.putString("URL",s);
-                fragment.setArguments(arg);
-                ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment,null).addToBackStack(null).commit();
+                arg.putString(Constants.LINK, link);
+                singleStoryFragment.setArguments(arg);
+                ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,singleStoryFragment,null).addToBackStack(null).commit();
+                return true;
+            }
+            if(Utils.isMainLink(Constants.IT_HAPPENS_LINK+link,PageInfo.getInstance().getTagInfos())){
+                Feed feed = new Feed();
+                Bundle arg = new Bundle();
+                arg.putString(Constants.LINK,Constants.IT_HAPPENS_LINK+link);
+                arg.putInt(Constants.ID_KEY,Utils.getLoaderId(context));
+                feed.setArguments(arg);
+                ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();
+                Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
                 return true;
             }
         }
         return super.onTouchEvent(widget, buffer, event);
+    }
+
+    private void showLoadingDialog(){
+        LoadingDialog loadingDialod = LoadingDialog.getDialod();
+        loadingDialod.show(((MainActivity)context).getSupportFragmentManager(),Constants.LOADING_DIALOG_TAG);
     }
 
 }

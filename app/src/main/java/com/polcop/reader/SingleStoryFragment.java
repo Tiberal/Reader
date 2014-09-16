@@ -34,6 +34,7 @@ public class SingleStoryFragment extends ListFragment {
         try {
             ArrayList<StoryInfo> storyInfos = new ArrayList<StoryInfo>();
             storyInfos.add(storyInfoFuture.get());
+            Utils.dismissLoadingDialog(getActivity());
             adapter.updateData(storyInfos);
             adapter.notifyDataSetChanged();
         } catch (InterruptedException e) {
@@ -49,7 +50,7 @@ public class SingleStoryFragment extends ListFragment {
         adapter = new FeedAdapter(getActivity(),null);
         setListAdapter(adapter);
         executorService = Executors.newFixedThreadPool(5);
-        link = getArguments().getString("URL");
+        link = getArguments().getString(Constants.LINK);
         storyInfoFuture = executorService.submit(new Callable<StoryInfo>() {
             @Override
             public StoryInfo call() throws Exception {

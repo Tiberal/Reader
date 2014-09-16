@@ -117,7 +117,7 @@ public class FeedAdapter extends BaseAdapter {
         viewHolder.tvStoryNumber.setText(storyInfos.get(position).getStoryNumber());
         viewHolder.tvStoryDate.setText(storyInfos.get(position).getPublishDate());
         viewHolder.tvTags.setText(storyInfos.get(position).getSpannedTags());
-        //viewHolder.tvTags.setMovementMethod(movementCheck);
+        viewHolder.tvTags.setMovementMethod(movementCheck);
         viewHolder.tvRate.setText(storyInfos.get(position).getRate());
         viewHolder.tvStory.setText(createSpannableStory(position));
         viewHolder.tvStory.setMovementMethod(movementCheck);

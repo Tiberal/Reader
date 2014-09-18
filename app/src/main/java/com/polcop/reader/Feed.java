@@ -29,6 +29,8 @@ public class Feed extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setClickable(true);
     }
 
     @Override

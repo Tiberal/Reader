@@ -4,6 +4,9 @@ package com.polcop.reader;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.KeyEvent;
+import android.view.View;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,7 +21,7 @@ import java.util.concurrent.Future;
 /**
  * Created by Oleg on 14.09.2014.
  */
-public class SingleStoryFragment extends ListFragment {
+public class SingleStoryFragment extends ListFragment implements View.OnKeyListener{
 
     private String link;
     private ExecutorService executorService;
@@ -28,6 +31,8 @@ public class SingleStoryFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setVisibility(View.INVISIBLE);
+        ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setClickable(false);
         while (!storyInfoFuture.isDone()){
             //w8
         }
@@ -84,4 +89,15 @@ public class SingleStoryFragment extends ListFragment {
         return list.toArray(new String[]{});
     }
 
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if( keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setVisibility(View.VISIBLE);
+            ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setClickable(true);
+            return true;
+        }
+        return false;
+    }
 }

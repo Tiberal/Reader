@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         android:textSize="17dp"
         android:textColor="#2a2a2a"
-        android:text="sefd" />
+        />
 
 
 </LinearLayout>

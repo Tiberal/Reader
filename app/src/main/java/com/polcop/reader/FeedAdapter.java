@@ -1,28 +1,16 @@
 package com.polcop.reader;
 
 import android.content.Context;
-import android.text.Layout;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.method.LinkMovementMethod;
-import android.text.style.URLSpan;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import org.jsoup.Jsoup;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by oleg on 04.09.14.

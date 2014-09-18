@@ -59,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
             Utils.setLoaderId(this,Constants.IT_HAPPENS_LOADER);
             //надо будет перекинуть в навигацию по списку экшн бара
             switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
+            showCurrentPageInActionBar("Свежее");
         }
     }
 
@@ -82,6 +83,14 @@ public class MainActivity extends ActionBarActivity {
         });
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
                 | ActionBar.DISPLAY_SHOW_HOME);
+    }
+
+    private void showCurrentPageInActionBar(String s){
+        tvCurrentPage.setText(s);
+    }
+
+    private void setCurrentPageInActionBarClickable(boolean b){
+        tvCurrentPage.setClickable(b);
     }
 
     @Override
@@ -118,6 +127,7 @@ public class MainActivity extends ActionBarActivity {
         drawerExpandableListView.expandGroup(0);
     }
 
+    //обработчик нажатий NavigationDrawer
     private class DrawerItemClickListener implements ExpandableListView.OnChildClickListener,
             ExpandableListView.OnGroupClickListener {
 
@@ -157,21 +167,29 @@ public class MainActivity extends ActionBarActivity {
         if (groupPosition==0){
             switch (childPosition){
                 case 0:
-                    //PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                    PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                    showCurrentPageInActionBar("Свежие");
+                    setCurrentPageInActionBarClickable(true);
                     switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
                     break;
                 case 1:
-                    //PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_BEST);
+                    PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_BEST);
+                    showCurrentPageInActionBar("Лучшие");
+                    setCurrentPageInActionBarClickable(false);
                     switchContent(Constants.IT_HAPPENS_BEST, Constants.IT_HAPPENS_LOADER);
                     break;
                 case 2:
-                    //PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_RANDOM);
+                    PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_RANDOM);
+                    showCurrentPageInActionBar("Случайные");
+                    setCurrentPageInActionBarClickable(false);
                     switchContent(Constants.IT_HAPPENS_RANDOM, Constants.IT_HAPPENS_LOADER);
                     break;
             }
         }else if (groupPosition==1){
             ArrayList<TagInfo> tagInfos = PageInfo.getInstance().getTagInfos();
             PageInfo.getInstance().setCurrentPage(tagInfos.get(childPosition).getTagURL());
+            showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagName());
+            setCurrentPageInActionBarClickable(true);
             switchContent(tagInfos.get(childPosition).getTagURL(), Constants.IT_HAPPENS_LOADER);
         }
     }

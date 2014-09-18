@@ -91,7 +91,10 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
         }
         if (Utils.isMainLink(link, tagInfos)){
             PageInfo.getInstance().setStoryInfos(null);
-            PageInfo.getInstance().setMaxPageNumber(String.valueOf(Integer.parseInt(perviousPage)+2));
+            if (perviousPage!=null)
+                PageInfo.getInstance().setMaxPageNumber(String.valueOf(Integer.parseInt(perviousPage)+2));
+            else
+                PageInfo.getInstance().setMaxPageNumber(String.valueOf(2));
         }
         if (PageInfo.getInstance().getStoryInfos()==null){
             PageInfo.getInstance().setStoryInfos(storyInfos);

@@ -13,7 +13,7 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="page_select_title">Выбор страницы</string>
-    <string name="page_select_message">Выберите страницу с 1 по </string>
+    <string name="page_select_message">Выберите страницу с 1 по\u0020</string>
     <string name="page_select_exception">Некорректный ввод</string>
 
 

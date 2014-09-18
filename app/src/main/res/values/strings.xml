@@ -2,9 +2,21 @@
 <resources>
 
     <string name="app_name">Reader</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
+    <string name="footer_tv_load">Загрузка</string>
+    <string name="footer_but_reload">Попробовать снова</string>
+    <string name="no_network">Отсутствует подключение к сети</string>
+    <string name="loading_data">Загрузка данных</string>
+    <string name="loading_wait">Подождите</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="page_select_title">Выбор страницы</string>
+    <string name="page_select_message">Выберите страницу с 1 по </string>
+    <string name="page_select_exception">Некорректный ввод</string>
+
+
+
 
 </resources>

@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class MainActivity extends ActionBarActivity {
     private ActionBarDrawerToggle drawerToggle;
     private ExpandableListView drawerExpandableListView;
     private Feed feed;
+    private TextView tvCurrentPage;
+    private PageSelectionFragment pageSelectionFragment;
 
 
     @Override
@@ -50,8 +53,8 @@ public class MainActivity extends ActionBarActivity {
         };
         drawerLayout.setDrawerListener(drawerToggle);
         if (savedInstanceState == null) {
-            //первый запуск
             PageInfo.initInstance();
+            //первый запуск
             PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
             Utils.setLoaderId(this,Constants.IT_HAPPENS_LOADER);
             //надо будет перекинуть в навигацию по списку экшн бара
@@ -64,6 +67,21 @@ public class MainActivity extends ActionBarActivity {
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#c8c8c8")));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+        //добавление кастомного элемента
+        actionBar.setCustomView(R.layout.action_bar_text_view);
+        tvCurrentPage = (TextView)actionBar.getCustomView().findViewById(R.id.action_bar_text_view_tag);
+        tvCurrentPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"action",Toast.LENGTH_SHORT).show();
+                if(pageSelectionFragment==null){
+                    pageSelectionFragment = new PageSelectionFragment();
+                }
+                pageSelectionFragment.show(getSupportFragmentManager(),null);
+            }
+        });
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
+                | ActionBar.DISPLAY_SHOW_HOME);
     }
 
     @Override
@@ -165,7 +183,7 @@ public class MainActivity extends ActionBarActivity {
         }
         Bundle arg = new Bundle();
         arg.putString(Constants.LINK, link);
-        arg.putInt(Constants.ID_KEY,id);
+        arg.putInt(Constants.LOADER_ID,id);
        if(Utils.isOnline(this)){
             feed = new Feed();
             feed.setArguments(arg);

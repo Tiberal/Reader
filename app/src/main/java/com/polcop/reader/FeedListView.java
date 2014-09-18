@@ -77,4 +77,8 @@ public class FeedListView extends ListView {
         this.onScrollListener = onScrollListener;
     }
 
+    public LoadingFooterView getLoadingFooterView() {
+        return loadingFooterView;
+    }
+
 }

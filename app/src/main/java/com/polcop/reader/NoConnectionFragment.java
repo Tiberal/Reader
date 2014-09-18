@@ -29,6 +29,6 @@ public class NoConnectionFragment extends Fragment implements View.OnClickListen
             (getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();
 
         }else
-            Toast.makeText(getActivity(), "Отсутствует подключение к сети", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(R.string.no_network), Toast.LENGTH_LONG).show();
     }
 }

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * Created by oleg on 03.09.14.
@@ -17,6 +18,7 @@ public class Feed extends Fragment {
     private LoadersControl loadersControl;
     private boolean isFirstLoad = true;
     private LoadingDialog loadingDialod;
+    private String loadLink;
 
 
     @Override
@@ -35,22 +37,33 @@ public class Feed extends Fragment {
         listView = (FeedListView) view.findViewById(R.id.feed_list);
         listView.setDivider(new ColorDrawable(Color.parseColor("#a4a4a4")));
         listView.setDividerHeight(10);
+        listView.getLoadingFooterView().setOnReloadListener(new LoadingFooterView.OnReloadListener() {
+            @Override
+            public void OnReload() {
+                if(Utils.isOnline(getActivity())){
+                    listView.getLoadingFooterView().setInvisibleReloadButton();
+                    listView.getLoadingFooterView().setVisibleLoadingLoadingViews();
+                    loadData(loadLink, Constants.IT_HAPPENS_LOADER);
+                }else{
+                    Toast.makeText(getActivity(), "Отсутствует подключение к сети", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         loadersControl = new LoadersControl(getActivity(),getListView());
         //todo лодер контрол сделать в единственно экземпляре
         listView.setPagination(new FeedListView.Pagination() {
             @Override
             public void onLoadContent() {
-                String loadLink;
+                //final String loadLink;
                 if (PageInfo.getInstance().getCurrentPage().equals(Constants.IT_HAPPENS_LINK)){
-                    loadLink = "http://ithappens.me/page/"+PageInfo.getInstance().getPreviousPage();
+                    loadLink = Constants.IT_HAPPENS_PAGE+PageInfo.getInstance().getPreviousPage();
                 }else {
                     loadLink = PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage();
                 }
                 if(!Utils.isOnline(getActivity())){
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.LINK,loadLink);
-                    bundle.putInt(Constants.LOADER_ID,Constants.IT_HAPPENS_LOADER);
-                    Utils.showNoConnectionFragment(bundle,getActivity());
+                    Toast.makeText(getActivity(), "Отсутствует подключение к сети", Toast.LENGTH_LONG).show();
+                    listView.getLoadingFooterView().setInvisibleLoadingLoadingViews();
+                    listView.getLoadingFooterView().setVisibleReloadButton();
                     return;
                 }
                 if(PageInfo.getInstance().getPreviousPage()==null) return;
@@ -81,7 +94,7 @@ public class Feed extends Fragment {
 
     public void loadData (String link, int loaderId){
         Bundle bundle = new Bundle();
-        bundle.putString("URL",link);
+        bundle.putString(Constants.LINK,link);
         getActivity().getSupportLoaderManager().restartLoader(loaderId,bundle,loadersControl);
     }
 

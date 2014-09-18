@@ -20,10 +20,9 @@ public class LoadingDialog extends DialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         dialog = new ProgressDialog(getActivity());
-        dialog.setTitle("Загрузка данных");
+        dialog.setTitle(R.string.loading_data);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage("Подождите");
-        // dialog.setIndeterminate(true);
+        dialog.setMessage(getString(R.string.loading_wait));
         setCancelable(false);
         return dialog;
     }

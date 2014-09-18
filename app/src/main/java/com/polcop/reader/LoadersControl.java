@@ -26,7 +26,7 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
 
     @Override
     public Loader<Boolean> onCreateLoader(int id, Bundle bundle) {
-        link = bundle.getString("URL");
+        link = bundle.getString(Constants.LINK);
         return new ItHappensLoader(context,link);
     }
 

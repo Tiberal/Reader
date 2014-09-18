@@ -1,20 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:layout_margin="10dp"
     android:orientation="horizontal">
-    <ProgressBar
-        android:id="@+id/video_item_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginRight="5dp"
-        style="?android:progressBarStyle"
-        android:indeterminate="true"/>
-    <TextView
-        android:id="@+id/video_item_label"
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading"/>
-</LinearLayout>
+        android:text="@string/footer_but_reload"
+        android:id="@+id/reload"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loading_linear_layout"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="false"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="false"
+        android:layout_centerHorizontal="true">
+
+        <ProgressBar
+            android:id="@+id/video_item_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="5dp"
+            style="?android:progressBarStyle"
+            android:indeterminate="true"/>
+
+        <TextView
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/footer_tv_load"
+            android:layout_alignBottom="@+id/loading_linear_layout"
+            android:layout_toRightOf="@+id/loading_linear_layout"
+            android:layout_toEndOf="@+id/loading_linear_layout"
+            android:layout_marginTop="15dp" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

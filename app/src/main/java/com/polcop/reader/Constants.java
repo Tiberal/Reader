@@ -17,4 +17,5 @@ public class Constants {
     public static final int IT_HAPPENS_LOADER = 103;
     public static final String LOADER_ID = "loader_id";
     public static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
+    public static String IT_HAPPENS_PAGE = "http://ithappens.me/page/";
 }

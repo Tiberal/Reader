@@ -53,6 +53,7 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
     public Boolean loadInBackground() {
         ArrayList<StoryInfo> storyInfos = new ArrayList<StoryInfo>();
         ArrayList<TagInfo> tagInfos = new ArrayList<TagInfo>();
+        String perviousPage;
         try {
             Elements elements;
             Document document;
@@ -70,7 +71,8 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
             Collections.sort(tagInfos, this);
             document = Jsoup.connect(link).timeout(10000).get();
             elements =document.select("div.content").select(".story");
-            PageInfo.getInstance().setPreviousPage(getPreviousPageNumber(document));
+            perviousPage = getPreviousPageNumber(document);
+            PageInfo.getInstance().setPreviousPage(perviousPage);
             StoryInfo.Builder storyBuilder=new StoryInfo.Builder();
             for (Element element:elements){
                 storyBuilder.setBadURL("");
@@ -89,6 +91,7 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
         }
         if (Utils.isMainLink(link, tagInfos)){
             PageInfo.getInstance().setStoryInfos(null);
+            PageInfo.getInstance().setMaxPageNumber(String.valueOf(Integer.parseInt(perviousPage)+2));
         }
         if (PageInfo.getInstance().getStoryInfos()==null){
             PageInfo.getInstance().setStoryInfos(storyInfos);

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -54,11 +55,17 @@ public class Utils {
     }
 
     public static void showNoConnectionFragment(Bundle bundle, Context context){
-        Toast.makeText(context, "Отсутствует подключение к сети", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, context.getString(R.string.no_network), Toast.LENGTH_LONG).show();
         NoConnectionFragment noConnection = new NoConnectionFragment();
         noConnection.setArguments(bundle);
         ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container, noConnection).commit();
     }
 
+    public static void clearBackStack(Context context){
+        FragmentManager manager = ((MainActivity)context).getSupportFragmentManager();
+        for(int i = 0; i < manager.getBackStackEntryCount(); ++i) {
+            manager.popBackStack();
+        }
+    }
 
 }

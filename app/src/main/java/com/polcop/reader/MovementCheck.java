@@ -54,6 +54,8 @@ public class MovementCheck  extends LinkMovementMethod {
                 return true;
             }
             if(Utils.isMainLink(Constants.IT_HAPPENS_LINK+link,PageInfo.getInstance().getTagInfos())){
+                Utils.clearBackStack(context);
+                PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK+link);
                 Feed feed = new Feed();
                 Bundle arg = new Bundle();
                 arg.putString(Constants.LINK,Constants.IT_HAPPENS_LINK+link);

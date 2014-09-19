@@ -6,9 +6,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.text.InputType;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -45,7 +43,7 @@ public class PageSelectionFragment extends DialogFragment{
                 PageInfo.getInstance().setStoryInfos(null);
                 Feed feed = new Feed();
                 Bundle arg = new Bundle();
-                switch (Utils.getLoaderId(getActivity())){
+                switch (Utils.getLoaderId()){
                     case Constants.IT_HAPPENS_LOADER:
                         setItHappensPage(feed,arg,newPage);
                     break;
@@ -68,7 +66,7 @@ public class PageSelectionFragment extends DialogFragment{
         }else{
             arg.putString(Constants.LINK, PageInfo.getInstance().getCurrentPage() + "/" + newPage);
         }
-        arg.putInt(Constants.LOADER_ID,Utils.getLoaderId(getActivity()));
+        arg.putInt(Constants.LOADER_ID,Utils.getLoaderId());
         feed.setArguments(arg);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, feed, Constants.FEED_TAG)

@@ -42,7 +42,7 @@ public class Feed extends Fragment {
         listView.getLoadingFooterView().setOnReloadListener(new LoadingFooterView.OnReloadListener() {
             @Override
             public void OnReload() {
-                if(Utils.isOnline(getActivity())){
+                if(Utils.isOnline()){
                     listView.getLoadingFooterView().setInvisibleReloadButton();
                     listView.getLoadingFooterView().setVisibleLoadingLoadingViews();
                     loadData(loadLink, Constants.IT_HAPPENS_LOADER);
@@ -62,14 +62,14 @@ public class Feed extends Fragment {
                 }else {
                     loadLink = PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage();
                 }
-                if(!Utils.isOnline(getActivity())){
+                if(!Utils.isOnline()){
                     Toast.makeText(getActivity(), "Отсутствует подключение к сети", Toast.LENGTH_LONG).show();
                     listView.getLoadingFooterView().setInvisibleLoadingLoadingViews();
                     listView.getLoadingFooterView().setVisibleReloadButton();
                     return;
                 }
                 if(PageInfo.getInstance().getPreviousPage()==null) return;
-                loadData(loadLink,Utils.getLoaderId(getActivity()));
+                loadData(loadLink,Utils.getLoaderId());
                 }
         });
         if(isFirstLoad){

@@ -49,6 +49,8 @@ public class SingleStoryFragment extends ListFragment implements View.OnKeyListe
         }
     }
 
+    //todo при переходе по тегу не обновляет экшн бар
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

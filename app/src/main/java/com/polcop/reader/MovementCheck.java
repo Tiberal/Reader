@@ -59,7 +59,7 @@ public class MovementCheck  extends LinkMovementMethod {
                 Feed feed = new Feed();
                 Bundle arg = new Bundle();
                 arg.putString(Constants.LINK,Constants.IT_HAPPENS_LINK+link);
-                arg.putInt(Constants.ID_KEY,Utils.getLoaderId(context));
+                arg.putInt(Constants.ID_KEY,Utils.getLoaderId());
                 feed.setArguments(arg);
                 ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();
                 Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();

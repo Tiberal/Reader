@@ -24,12 +24,15 @@ public class Utils {
         if (link.equals(Constants.IT_HAPPENS_LINK)) return true;
         if(link.equals(Constants.IT_HAPPENS_BEST)) return true;
         if(link.equals(Constants.IT_HAPPENS_RANDOM)) return true;
+        if(link.equals(Constants.ZADOLBALI_LINK)) return true;
+        if(link.equals(Constants.ZADOLBALI_BEST)) return true;
+        if(link.equals(Constants.ZADOLBALI_RANDOM)) return true;
         return false;
     }
 
-    public static boolean isOnline(Context context) {
+    public static boolean isOnline() {
         ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) PageInfo.getInstance().getContext().getSystemService(PageInfo.getInstance().getContext().CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             return true;
@@ -37,13 +40,13 @@ public class Utils {
         return false;
     }
 
-    public static int getLoaderId (Context context){
-        SharedPreferences preferences = ((MainActivity)context).getPreferences(((MainActivity)context).MODE_PRIVATE);
+    public static int getLoaderId (){
+        SharedPreferences preferences = ((MainActivity)PageInfo.getInstance().getContext()).getPreferences(((MainActivity)PageInfo.getInstance().getContext()).MODE_PRIVATE);
         return preferences.getInt(Constants.LOADER_ID,-1);
     }
 
-    public static void setLoaderId(Context context, int loaderId){
-        SharedPreferences preferences = ((MainActivity)context).getPreferences(((MainActivity)context).MODE_PRIVATE);
+    public static void setLoaderId(int loaderId){
+        SharedPreferences preferences = ((MainActivity)PageInfo.getInstance().getContext()).getPreferences(((MainActivity)PageInfo.getInstance().getContext()).MODE_PRIVATE);
         preferences.edit().putInt(Constants.LOADER_ID, loaderId).commit();
     }
 

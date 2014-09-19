@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -26,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
     private Feed feed;
     private TextView tvCurrentPage;
     private PageSelectionFragment pageSelectionFragment;
-
+    private String[] quotations = {"ItHappens","Задолба!ли","Bash","KillMePlz"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +54,8 @@ public class MainActivity extends ActionBarActivity {
         };
         drawerLayout.setDrawerListener(drawerToggle);
         if (savedInstanceState == null) {
-            PageInfo.initInstance();
             //первый запуск
-            PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
-            Utils.setLoaderId(this,Constants.IT_HAPPENS_LOADER);
-            //надо будет перекинуть в навигацию по списку экшн бара
-            switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
+            PageInfo.initInstance(this);
             showCurrentPageInActionBar("Свежее");
         }
     }
@@ -66,8 +63,6 @@ public class MainActivity extends ActionBarActivity {
     private void setActionBarOptions(){
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#c8c8c8")));
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
         //добавление кастомного элемента
         actionBar.setCustomView(R.layout.action_bar_text_view);
         tvCurrentPage = (TextView)actionBar.getCustomView().findViewById(R.id.action_bar_text_view_tag);
@@ -83,7 +78,15 @@ public class MainActivity extends ActionBarActivity {
         });
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
                 | ActionBar.DISPLAY_SHOW_HOME);
-    }
+        //добавление списка цитатников
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.simple_item,quotations);
+        actionBar.setListNavigationCallbacks(adapter, this);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+   }
 
     private void showCurrentPageInActionBar(String s){
         tvCurrentPage.setText(s);
@@ -127,6 +130,36 @@ public class MainActivity extends ActionBarActivity {
         drawerExpandableListView.expandGroup(0);
     }
 
+    //обработчик нажатий на список
+    @Override
+    public boolean onNavigationItemSelected(int position, long id) {
+        switch (position){
+            case 0:
+                Toast.makeText(this,"ItHappens",Toast.LENGTH_SHORT).show();
+                PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                //PageInfo.getInstance().setStoryInfos(null);
+                //Utils.setLoaderId(this,Constants.IT_HAPPENS_LOADER);
+                switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
+                break;
+            case 1:
+                Toast.makeText(this,"Задолба!ли",Toast.LENGTH_SHORT).show();
+                PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
+                //PageInfo.getInstance().setStoryInfos(null);
+                //Utils.setLoaderId(this,Constants.ZADOLBALI_LOADER);
+                switchContent(Constants.ZADOLBALI_LINK, Constants.ZADOLBALI_LOADER);
+                break;
+            case 2:
+                Toast.makeText(this,"Bash",Toast.LENGTH_SHORT).show();
+                //switchContent(Constants.BASH_LINK, Constants.BASH_LOADER);
+                break;
+            case 3:
+                Toast.makeText(this,"KillMePlz",Toast.LENGTH_SHORT).show();
+                //switchContent(Constants.KILL_ME_PLZ_LINK, Constants.KILL_ME_PLZ_LOADER);
+                break;
+        }
+        return true;
+    }
+
     //обработчик нажатий NavigationDrawer
     private class DrawerItemClickListener implements ExpandableListView.OnChildClickListener,
             ExpandableListView.OnGroupClickListener {
@@ -139,7 +172,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            switch (Utils.getLoaderId(context)){
+            switch (Utils.getLoaderId()){
                 case Constants.IT_HAPPENS_LOADER:
                     itHappensClick(groupPosition,childPosition);
                     //todo click listener
@@ -202,9 +235,10 @@ public class MainActivity extends ActionBarActivity {
         Bundle arg = new Bundle();
         arg.putString(Constants.LINK, link);
         arg.putInt(Constants.LOADER_ID,id);
-       if(Utils.isOnline(this)){
+       if(Utils.isOnline()){
             feed = new Feed();
             feed.setArguments(arg);
+            Utils.setLoaderId(id);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, feed, Constants.FEED_TAG)
                     .commit();

@@ -1,5 +1,7 @@
 package com.polcop.reader;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 /**
@@ -7,21 +9,22 @@ import java.util.ArrayList;
  */
 public class PageInfo {
 
+    private Context context;
     private static PageInfo instance;
     private ArrayList<StoryInfo> storyInfos=null;
     private ArrayList<TagInfo> tagInfos = null;
     private String currentPage;
     private String maxPageNumber;
     private String currentPageNumber;
-
     private String previousPage;
 
     public PageInfo() {
     }
 
-    public static  void initInstance (){
+    public static  void initInstance (Context context){
         if (instance == null) {
             instance = new PageInfo();
+            instance.setContext(context);
         }
     }
 
@@ -84,4 +87,11 @@ public class PageInfo {
         this.previousPage = previousPage;
     }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public Context getContext() {
+        return context;
+    }
 }

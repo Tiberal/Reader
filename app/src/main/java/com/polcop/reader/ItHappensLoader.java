@@ -25,7 +25,9 @@ import java.util.regex.Pattern;
  */
 public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Comparator<TagInfo> {
 
+    private String tagLink;
     private String link;
+    private String perviousPage;
 
     /**
      * Stores away the application context associated with context. Since Loaders can be used
@@ -34,9 +36,10 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
      * @param context used to retrieve the application context.
      * @param link
      */
-    public ItHappensLoader(Context context, String link) {
+    public ItHappensLoader(Context context, String link, String tagLink) {
         super(context);
         this.link = link;
+        this.tagLink = tagLink;
     }
 
     @Override
@@ -53,26 +56,28 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
     public Boolean loadInBackground() {
         ArrayList<StoryInfo> storyInfos = new ArrayList<StoryInfo>();
         ArrayList<TagInfo> tagInfos = new ArrayList<TagInfo>();
-        String perviousPage;
+        int loaderId = Utils.getLoaderId();
         try {
             Elements elements;
             Document document;
-            document = Jsoup.connect(Constants.IT_HAPPENS_TAG).timeout(10000).get();
+            document = Jsoup.connect(tagLink).timeout(10000).get();
             TagInfo.Builder tagBuilder = new TagInfo.Builder();
             elements = document.select(".cloud").select("li");
             for (Element element:elements){
                 Element element1 = element.child(0);
                 tagBuilder.setHtmlTag(element1.outerHtml());
                 tagBuilder.setTagName(element.text());
-                tagBuilder.setTagURL(Constants.IT_HAPPENS_LINK + element.child(0).attr("href"));
+                if(loaderId==Constants.IT_HAPPENS_LOADER){
+                    tagBuilder.setTagURL(Constants.IT_HAPPENS_LINK + element.child(0).attr("href"));
+                }else{
+                    tagBuilder.setTagURL(Constants.ZADOLBALI_LINK + element.child(0).attr("href"));
+                }
                 tagBuilder.setTotal(Integer.parseInt(element.attr("data-count")));
                 tagInfos.add(tagBuilder.build());
             }
             Collections.sort(tagInfos, this);
             document = Jsoup.connect(link).timeout(10000).get();
             elements =document.select("div.content").select(".story");
-            perviousPage = getPreviousPageNumber(document);
-            PageInfo.getInstance().setPreviousPage(perviousPage);
             StoryInfo.Builder storyBuilder=new StoryInfo.Builder();
             for (Element element:elements){
                 storyBuilder.setBadURL("");
@@ -85,16 +90,25 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
                 storyBuilder.setStoryName(element.children().get(1).text());
                 storyInfos.add(storyBuilder.build());
             }
+            setPerviousPage(document);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
         if (Utils.isMainLink(link, tagInfos)){
             PageInfo.getInstance().setStoryInfos(null);
-            if (perviousPage!=null)
-                PageInfo.getInstance().setMaxPageNumber(String.valueOf(Integer.parseInt(perviousPage)+2));
-            else
-                PageInfo.getInstance().setMaxPageNumber(String.valueOf(2));
+            if(loaderId==Constants.IT_HAPPENS_LOADER){
+                if (perviousPage!=null)
+                    PageInfo.getInstance().setMaxPageNumber(String.valueOf(Integer.parseInt(perviousPage)+2));
+                else
+                    PageInfo.getInstance().setMaxPageNumber(String.valueOf(2));
+            }else{
+                if(link.equals(Constants.ZADOLBALI_LINK)){
+                    //todo получаем дату из шапки
+                }else{
+                    //todo так же как в итхепенс
+                }
+            }
         }
         if (PageInfo.getInstance().getStoryInfos()==null){
             PageInfo.getInstance().setStoryInfos(storyInfos);
@@ -134,6 +148,18 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
         }else if (lhs.getTotal() < rhs.getTotal()){
             return 1;
         }else return 0;    }
+
+    public void setPerviousPage(Document document) {
+        int id = Utils.getLoaderId();
+        if(id==Constants.IT_HAPPENS_LOADER){
+            perviousPage = document.select("li.prev").get(0).text();
+            PageInfo.getInstance().setPreviousPage(perviousPage);
+        }else{
+            Element elements = document.select("li.prev").get(0).child(0);
+            perviousPage = elements.attr("href");
+            PageInfo.getInstance().setPreviousPage(perviousPage);
+        }
+    }
 }
 
 

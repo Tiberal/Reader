@@ -23,7 +23,7 @@ public class NoConnectionFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        if(Utils.isOnline(getActivity())){
+        if(Utils.isOnline()){
             Feed feed = new Feed();
             feed.setArguments(getArguments());
             (getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();

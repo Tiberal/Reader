@@ -17,5 +17,9 @@ public class Constants {
     public static final int IT_HAPPENS_LOADER = 103;
     public static final String LOADER_ID = "loader_id";
     public static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
-    public static String IT_HAPPENS_PAGE = "http://ithappens.me/page/";
+    public static final String IT_HAPPENS_PAGE = "http://ithappens.me/page/";
+    public static final String ZADOLBALI_LINK = "http://zadolba.li";
+    public static final String ZADOLBALI_BEST = "http://zadolba.li/best";
+    public static final String ZADOLBALI_RANDOM = "http://zadolba.li/random";
+    public static final String ZADDOLBALI_TAG = "http://zadolba.li/tags";
 }

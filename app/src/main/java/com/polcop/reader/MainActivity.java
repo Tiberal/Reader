@@ -138,14 +138,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                 Toast.makeText(this,"ItHappens",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
                 //PageInfo.getInstance().setStoryInfos(null);
-                //Utils.setLoaderId(this,Constants.IT_HAPPENS_LOADER);
+                //Utils.setLoaderId(Constants.IT_HAPPENS_LOADER);
                 switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
                 break;
             case 1:
                 Toast.makeText(this,"Задолба!ли",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
                 //PageInfo.getInstance().setStoryInfos(null);
-                //Utils.setLoaderId(this,Constants.ZADOLBALI_LOADER);
+                //Utils.setLoaderId(Constants.ZADOLBALI_LOADER);
                 switchContent(Constants.ZADOLBALI_LINK, Constants.ZADOLBALI_LOADER);
                 break;
             case 2:
@@ -174,10 +174,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
             switch (Utils.getLoaderId()){
                 case Constants.IT_HAPPENS_LOADER:
-                    itHappensClick(groupPosition,childPosition);
+                    itHappensAndZadolbaliClick(groupPosition,childPosition,Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
                     //todo click listener
                     break;
                 case Constants.ZADOLBALI_LOADER:
+                    itHappensAndZadolbaliClick(groupPosition,childPosition,Constants.ZADOLBALI_LINK, Constants.ZADOLBALI_LOADER);
+
                     //zadolbaliClick(groupPosition,childPosition);
                     break;
                 case Constants.BASH_LOADER:
@@ -196,26 +198,33 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         }
     }
 
-    private void itHappensClick(int groupPosition, int childPosition){
+    private void itHappensAndZadolbaliClick(int groupPosition, int childPosition, String link, int loaderId){
         if (groupPosition==0){
             switch (childPosition){
                 case 0:
-                    PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                    if (loaderId==Constants.IT_HAPPENS_LOADER)
+                        PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                    else
+                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
                     showCurrentPageInActionBar("Свежие");
                     setCurrentPageInActionBarClickable(true);
-                    switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
+                    switchContent(link, loaderId);
                     break;
                 case 1:
-                    PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_BEST);
-                    showCurrentPageInActionBar("Лучшие");
+                    if (loaderId==Constants.IT_HAPPENS_LOADER)
+                        PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                    else
+                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);                    showCurrentPageInActionBar("Лучшие");
                     setCurrentPageInActionBarClickable(false);
-                    switchContent(Constants.IT_HAPPENS_BEST, Constants.IT_HAPPENS_LOADER);
+                    switchContent(link, loaderId);
                     break;
                 case 2:
-                    PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_RANDOM);
-                    showCurrentPageInActionBar("Случайные");
+                    if (loaderId==Constants.IT_HAPPENS_LOADER)
+                        PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                    else
+                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);                    showCurrentPageInActionBar("Случайные");
                     setCurrentPageInActionBarClickable(false);
-                    switchContent(Constants.IT_HAPPENS_RANDOM, Constants.IT_HAPPENS_LOADER);
+                    switchContent(link, loaderId);
                     break;
             }
         }else if (groupPosition==1){
@@ -223,7 +232,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             PageInfo.getInstance().setCurrentPage(tagInfos.get(childPosition).getTagURL());
             showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagName());
             setCurrentPageInActionBarClickable(true);
-            switchContent(tagInfos.get(childPosition).getTagURL(), Constants.IT_HAPPENS_LOADER);
+            switchContent(tagInfos.get(childPosition).getTagURL(), loaderId);
         }
     }
 

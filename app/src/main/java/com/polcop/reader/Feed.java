@@ -57,11 +57,20 @@ public class Feed extends Fragment {
             @Override
             public void onLoadContent() {
                 //final String loadLink;
-                if (PageInfo.getInstance().getCurrentPage().equals(Constants.IT_HAPPENS_LINK)){
-                    loadLink = Constants.IT_HAPPENS_PAGE+PageInfo.getInstance().getPreviousPage();
-                }else {
-                    loadLink = PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage();
+                int id = Utils.getLoaderId();
+                switch (id){
+                    case Constants.IT_HAPPENS_LOADER:
+                        if (PageInfo.getInstance().getCurrentPage().equals(Constants.IT_HAPPENS_LINK)){
+                        loadLink = Constants.IT_HAPPENS_PAGE+PageInfo.getInstance().getPreviousPage();
+                    }else {
+                        loadLink = PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage();
+                    }
+                        break;
+                    case Constants.ZADOLBALI_LOADER:
+                        loadLink = PageInfo.getInstance().getCurrentPage()+PageInfo.getInstance().getPreviousPage();
+                        break;
                 }
+
                 if(!Utils.isOnline()){
                     Toast.makeText(getActivity(), "Отсутствует подключение к сети", Toast.LENGTH_LONG).show();
                     listView.getLoadingFooterView().setInvisibleLoadingLoadingViews();

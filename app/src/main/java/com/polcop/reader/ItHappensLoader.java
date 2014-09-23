@@ -28,6 +28,7 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
     private String tagLink;
     private String link;
     private String perviousPage;
+    private String maxPage;
 
     /**
      * Stores away the application context associated with context. Since Loaders can be used
@@ -90,25 +91,14 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
                 storyBuilder.setStoryName(element.children().get(1).text());
                 storyInfos.add(storyBuilder.build());
             }
+            if (Utils.isMainLink(link, tagInfos)) {
+                PageInfo.getInstance().clearStoryInfo();
+            }
             setPerviousPage(document);
+            setMaxPage(document);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
-        }
-        if (Utils.isMainLink(link, tagInfos)){
-            PageInfo.getInstance().setStoryInfos(null);
-            if(loaderId==Constants.IT_HAPPENS_LOADER){
-                if (perviousPage!=null)
-                    PageInfo.getInstance().setMaxPageNumber(String.valueOf(Integer.parseInt(perviousPage)+2));
-                else
-                    PageInfo.getInstance().setMaxPageNumber(String.valueOf(2));
-            }else{
-                if(link.equals(Constants.ZADOLBALI_LINK)){
-                    //todo получаем дату из шапки
-                }else{
-                    //todo так же как в итхепенс
-                }
-            }
         }
         if (PageInfo.getInstance().getStoryInfos()==null){
             PageInfo.getInstance().setStoryInfos(storyInfos);
@@ -150,15 +140,35 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
         }else return 0;    }
 
     public void setPerviousPage(Document document) {
+        //todo не правильно максимальная изменяется при листании
         int id = Utils.getLoaderId();
         if(id==Constants.IT_HAPPENS_LOADER){
             perviousPage = document.select("li.prev").get(0).text();
-            PageInfo.getInstance().setPreviousPage(perviousPage);
         }else{
             Element elements = document.select("li.prev").get(0).child(0);
             perviousPage = elements.attr("href");
-            PageInfo.getInstance().setPreviousPage(perviousPage);
         }
+        PageInfo.getInstance().setPreviousPage(perviousPage);
+
+    }
+
+    public void setMaxPage(Document document) {
+        //if (Utils.getLoaderId()==Constants.ZADOLBALI_LOADER){
+        Pattern pattern = Pattern.compile("^(http://zadolba.li)(/\\d+)*$");
+        Matcher matcher = pattern.matcher(link);
+            if(matcher.matches()){
+                maxPage = document.select("body").get(0).attr("data-today-date");
+                PageInfo.getInstance().setMaxPageNumber(maxPage);
+                return;
+            }else{
+
+            }
+            if (perviousPage!=null)
+                maxPage =  String.valueOf(Integer.parseInt(perviousPage)+2);
+            else
+                maxPage =  String.valueOf(2);
+       // }
+        PageInfo.getInstance().setMaxPageNumber(maxPage);
     }
 }
 

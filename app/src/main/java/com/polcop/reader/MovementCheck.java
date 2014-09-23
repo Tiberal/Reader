@@ -27,6 +27,7 @@ public class MovementCheck  extends LinkMovementMethod {
     public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
 
         int action = event.getAction();
+        int loaderId = Utils.getLoaderId();
 
         if (action == MotionEvent.ACTION_UP){
             int x = (int) event.getX();
@@ -41,30 +42,38 @@ public class MovementCheck  extends LinkMovementMethod {
             URLSpan[] links = buffer.getSpans(off, off, URLSpan.class);
             if (links.length==0) return true;
             String link = links[0].getURL();
-            Pattern pattern = Pattern.compile("^/story/[0-9]+$");
-            Matcher matcher = pattern.matcher(link);
-            if(matcher.matches()){
-                Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
-                showLoadingDialog();
-                SingleStoryFragment singleStoryFragment = new SingleStoryFragment();
-                Bundle arg = new Bundle();
-                arg.putString(Constants.LINK, link);
-                singleStoryFragment.setArguments(arg);
-                ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,singleStoryFragment,null).addToBackStack(null).commit();
-                return true;
+            switch (loaderId){
+                case Constants.IT_HAPPENS_LOADER:
+                    Pattern pattern = Pattern.compile("^/story/[0-9]+$");
+                    Matcher matcher = pattern.matcher(link);
+                    if(matcher.matches()){
+                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                        showLoadingDialog();
+                        SingleStoryFragment singleStoryFragment = new SingleStoryFragment();
+                        Bundle arg = new Bundle();
+                        arg.putString(Constants.LINK, link);
+                        singleStoryFragment.setArguments(arg);
+                        ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,singleStoryFragment,null).addToBackStack(null).commit();
+                        return true;
+                    }
+                    if(Utils.isMainLink(Constants.IT_HAPPENS_LINK+link,PageInfo.getInstance().getTagInfos())){
+                        Utils.clearBackStack(context);
+                        PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK+link);
+                        Feed feed = new Feed();
+                        Bundle arg = new Bundle();
+                        arg.putString(Constants.LINK,Constants.IT_HAPPENS_LINK+link);
+                        arg.putInt(Constants.ID_KEY,Utils.getLoaderId());
+                        feed.setArguments(arg);
+                        ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();
+                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+                break;
+                case Constants.ZADOLBALI_LOADER:
+
+                break;
             }
-            if(Utils.isMainLink(Constants.IT_HAPPENS_LINK+link,PageInfo.getInstance().getTagInfos())){
-                Utils.clearBackStack(context);
-                PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK+link);
-                Feed feed = new Feed();
-                Bundle arg = new Bundle();
-                arg.putString(Constants.LINK,Constants.IT_HAPPENS_LINK+link);
-                arg.putInt(Constants.ID_KEY,Utils.getLoaderId());
-                feed.setArguments(arg);
-                ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();
-                Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
-                return true;
-            }
+
         }
         return super.onTouchEvent(widget, buffer, event);
     }

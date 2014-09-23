@@ -17,6 +17,7 @@ public class PageInfo {
     private String maxPageNumber;
     private String currentPageNumber;
     private String previousPage;
+    private boolean maxPageMark = true;
 
     public PageInfo() {
     }
@@ -68,7 +69,10 @@ public class PageInfo {
     }
 
     public void setMaxPageNumber(String maxPageNumber) {
-        this.maxPageNumber = maxPageNumber;
+        if(maxPageMark){
+            this.maxPageNumber = maxPageNumber;
+            maxPageMark=false;
+        }
     }
 
     public String getCurrentPageNumber() {
@@ -93,5 +97,10 @@ public class PageInfo {
 
     public Context getContext() {
         return context;
+    }
+
+    public  void clearStoryInfo(){
+        setStoryInfos(null);
+        maxPageMark = true;
     }
 }

@@ -67,7 +67,7 @@ public class Feed extends Fragment {
                     }
                         break;
                     case Constants.ZADOLBALI_LOADER:
-                        loadLink = PageInfo.getInstance().getCurrentPage()+PageInfo.getInstance().getPreviousPage();
+                        loadLink = Constants.ZADOLBALI_LINK+PageInfo.getInstance().getPreviousPage();
                         break;
                 }
 
@@ -78,6 +78,7 @@ public class Feed extends Fragment {
                     return;
                 }
                 if(PageInfo.getInstance().getPreviousPage()==null) return;
+                Toast.makeText(getActivity(),loadLink,Toast.LENGTH_LONG).show();
                 loadData(loadLink,Utils.getLoaderId());
                 }
         });

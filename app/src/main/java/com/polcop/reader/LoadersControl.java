@@ -6,8 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.ArrayList;
-
 /**
  * Created by oleg on 04.09.14.
  */
@@ -30,9 +28,9 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
         int i = Utils.getLoaderId();
         switch (Utils.getLoaderId()){
             case Constants.IT_HAPPENS_LOADER:
-                return new ItHappensLoader(context,link, Constants.IT_HAPPENS_TAG);
+                return new ItHappensAndZadolbaliLoader(context,link, Constants.IT_HAPPENS_TAG);
             case  Constants.ZADOLBALI_LOADER:
-                return new ItHappensLoader(context, link, Constants.ZADDOLBALI_TAG);
+                return new ItHappensAndZadolbaliLoader(context, link, Constants.ZADDOLBALI_TAG);
         }
         return null;
     }

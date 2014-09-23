@@ -9,6 +9,8 @@ import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,8 +21,8 @@ public class MovementCheck  extends LinkMovementMethod {
 
     private Context context;
 
-    public MovementCheck(Context context) {
-        this.context=context;
+    public MovementCheck() {
+        this.context=PageInfo.getInstance().getContext();
     }
 
     @Override
@@ -44,43 +46,67 @@ public class MovementCheck  extends LinkMovementMethod {
             String link = links[0].getURL();
             switch (loaderId){
                 case Constants.IT_HAPPENS_LOADER:
-                    Pattern pattern = Pattern.compile("^/story/[0-9]+$");
-                    Matcher matcher = pattern.matcher(link);
-                    if(matcher.matches()){
-                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
-                        showLoadingDialog();
-                        SingleStoryFragment singleStoryFragment = new SingleStoryFragment();
-                        Bundle arg = new Bundle();
-                        arg.putString(Constants.LINK, link);
-                        singleStoryFragment.setArguments(arg);
-                        ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,singleStoryFragment,null).addToBackStack(null).commit();
-                        return true;
-                    }
                     if(Utils.isMainLink(Constants.IT_HAPPENS_LINK+link,PageInfo.getInstance().getTagInfos())){
-                        Utils.clearBackStack(context);
-                        PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK+link);
-                        Feed feed = new Feed();
-                        Bundle arg = new Bundle();
-                        arg.putString(Constants.LINK,Constants.IT_HAPPENS_LINK+link);
-                        arg.putInt(Constants.ID_KEY,Utils.getLoaderId());
-                        feed.setArguments(arg);
-                        ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();
+                        loadTagData(Constants.IT_HAPPENS_LINK,link);
                         Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
                         return true;
                     }
-                break;
+                    openStoryLink(Constants.IT_HAPPENS_LINK,link);
+                    Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                    return true;
                 case Constants.ZADOLBALI_LOADER:
-
-                break;
+                    if(Utils.isMainLink(Constants.ZADOLBALI_LINK+link,PageInfo.getInstance().getTagInfos())){
+                        loadTagData(Constants.ZADOLBALI_LINK,link);
+                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+                    openStoryLink(Constants.ZADOLBALI_LINK,link);
+                    Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                    return true;
             }
 
         }
         return super.onTouchEvent(widget, buffer, event);
     }
 
+    //открывает ссылку на историю
+    private void openStoryLink(String linkPart1, String linkPart2){
+        Pattern pattern = Pattern.compile("^/story/[0-9]+$");
+        Matcher matcher = pattern.matcher(linkPart2);
+        if(matcher.matches()) {
+            showLoadingDialog();
+            SingleStoryFragment singleStoryFragment = new SingleStoryFragment();
+            Bundle arg = new Bundle();
+            arg.putString(Constants.LINK, linkPart1+linkPart2);
+            singleStoryFragment.setArguments(arg);
+            ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container, singleStoryFragment, null).addToBackStack(null).commit();
+        }
+    }
+
+    private void loadTagData(String linkPart1, String linkPart2){
+        Utils.clearBackStack();
+        PageInfo.getInstance().setCurrentPage(linkPart1+linkPart2);
+        Feed feed = new Feed();
+        Bundle arg = new Bundle();
+        arg.putString(Constants.LINK, linkPart1 + linkPart2);
+        arg.putInt(Constants.ID_KEY, Utils.getLoaderId());
+        feed.setArguments(arg);
+        ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();
+        ((MainActivity) context).showCurrentPageInActionBar(getTagNameByLink(linkPart1 + linkPart2));
+    }
+
     private void showLoadingDialog(){
         LoadingDialog loadingDialod = LoadingDialog.getDialod();
         loadingDialod.show(((MainActivity)context).getSupportFragmentManager(),Constants.LOADING_DIALOG_TAG);
+    }
+
+    private String getTagNameByLink(String link){
+        ArrayList<TagInfo> tagInfos = PageInfo.getInstance().getTagInfos();
+        for (TagInfo tagInfo: tagInfos){
+            if(tagInfo.getTagURL().equals(link))
+                return tagInfo.getTagName();
+        }
+        return null;
     }
 
 }

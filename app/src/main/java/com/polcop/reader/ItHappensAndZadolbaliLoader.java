@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 /**
  * Created by oleg on 04.09.14.
  */
-public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Comparator<TagInfo> {
+public class ItHappensAndZadolbaliLoader extends AsyncTaskLoader<Boolean> implements Comparator<TagInfo> {
 
     private String tagLink;
     private String link;
@@ -37,7 +37,7 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
      * @param context used to retrieve the application context.
      * @param link
      */
-    public ItHappensLoader(Context context, String link, String tagLink) {
+    public ItHappensAndZadolbaliLoader(Context context, String link, String tagLink) {
         super(context);
         this.link = link;
         this.tagLink = tagLink;
@@ -64,13 +64,13 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
             document = Jsoup.connect(tagLink).timeout(10000).get();
             TagInfo.Builder tagBuilder = new TagInfo.Builder();
             elements = document.select(".cloud").select("li");
-            for (Element element:elements){
+            for (Element element : elements) {
                 Element element1 = element.child(0);
                 tagBuilder.setHtmlTag(element1.outerHtml());
                 tagBuilder.setTagName(element.text());
-                if(loaderId==Constants.IT_HAPPENS_LOADER){
+                if (loaderId == Constants.IT_HAPPENS_LOADER) {
                     tagBuilder.setTagURL(Constants.IT_HAPPENS_LINK + element.child(0).attr("href"));
-                }else{
+                } else {
                     tagBuilder.setTagURL(Constants.ZADOLBALI_LINK + element.child(0).attr("href"));
                 }
                 tagBuilder.setTotal(Integer.parseInt(element.attr("data-count")));
@@ -78,9 +78,9 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
             }
             Collections.sort(tagInfos, this);
             document = Jsoup.connect(link).timeout(10000).get();
-            elements =document.select("div.content").select(".story");
-            StoryInfo.Builder storyBuilder=new StoryInfo.Builder();
-            for (Element element:elements){
+            elements = document.select("div.content").select(".story");
+            StoryInfo.Builder storyBuilder = new StoryInfo.Builder();
+            for (Element element : elements) {
                 storyBuilder.setBadURL("");
                 storyBuilder.setGoodURL(element.select("div.button-group.like").select("a.button").attr("href"));
                 storyBuilder.setPublishDate(element.select(".date-time").text());
@@ -100,32 +100,32 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
             e.printStackTrace();
             return false;
         }
-        if (PageInfo.getInstance().getStoryInfos()==null){
+        if (PageInfo.getInstance().getStoryInfos() == null) {
             PageInfo.getInstance().setStoryInfos(storyInfos);
-        }else {
+        } else {
             PageInfo.getInstance().addStoryInfos(storyInfos);
         }
         PageInfo.getInstance().setTagInfos(tagInfos);
         return true;
     }
 
-    private String getPreviousPageNumber(Document document){
+    private String getPreviousPageNumber(Document document) {
         try {
             return document.select("li.prev").get(1).text();
-        }catch (IndexOutOfBoundsException e){
-           return null;
+        } catch (IndexOutOfBoundsException e) {
+            return null;
         }
     }
 
-    private String[] getHtmlLinkArray (Element element){
+    private String[] getHtmlLinkArray(Element element) {
         Elements elements;
         try {
             elements = element.select(".tags").get(0).child(1).children();
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             return null;
         }
-        ArrayList<String>list = new ArrayList<String>();
-        for (Element e:elements){
+        ArrayList<String> list = new ArrayList<String>();
+        for (Element e : elements) {
             list.add(e.html());
         }
         return list.toArray(new String[]{});
@@ -133,41 +133,52 @@ public class ItHappensLoader extends AsyncTaskLoader<Boolean> implements Compara
 
     @Override
     public int compare(TagInfo lhs, TagInfo rhs) {
-        if (lhs.getTotal() > rhs.getTotal()){
+        if (lhs.getTotal() > rhs.getTotal()) {
             return -1;
-        }else if (lhs.getTotal() < rhs.getTotal()){
+        } else if (lhs.getTotal() < rhs.getTotal()) {
             return 1;
-        }else return 0;    }
+        } else return 0;
+    }
 
     public void setPerviousPage(Document document) {
-        //todo не правильно максимальная изменяется при листании
         int id = Utils.getLoaderId();
-        if(id==Constants.IT_HAPPENS_LOADER){
-            perviousPage = document.select("li.prev").get(0).text();
-        }else{
-            Element elements = document.select("li.prev").get(0).child(0);
-            perviousPage = elements.attr("href");
+        try {
+            if (id == Constants.IT_HAPPENS_LOADER) {
+                perviousPage = document.select("li.prev").get(0).text();
+            } else {
+                Element elements = document.select("li.prev").get(0).child(0);
+                perviousPage = elements.attr("href");
+            }
+            PageInfo.getInstance().setPreviousPage(perviousPage);
+        } catch (IndexOutOfBoundsException e) {
+            PageInfo.getInstance().setPreviousPage(null);
         }
-        PageInfo.getInstance().setPreviousPage(perviousPage);
+
 
     }
 
     public void setMaxPage(Document document) {
-        //if (Utils.getLoaderId()==Constants.ZADOLBALI_LOADER){
-        Pattern pattern = Pattern.compile("^(http://zadolba.li)(/\\d+)*$");
-        Matcher matcher = pattern.matcher(link);
-            if(matcher.matches()){
+        if (Utils.getLoaderId() == Constants.ZADOLBALI_LOADER) {
+            Pattern pattern = Pattern.compile("^(http://zadolba.li)(/\\d+)*$");
+            Matcher matcher = pattern.matcher(link);
+            if (matcher.matches()) {
                 maxPage = document.select("body").get(0).attr("data-today-date");
-                PageInfo.getInstance().setMaxPageNumber(maxPage);
                 return;
-            }else{
-
+            } else {
+                int page = Integer.parseInt(perviousPage.substring(perviousPage.lastIndexOf("/")+1));
+                if (perviousPage != null)
+                    maxPage = String.valueOf(page + 2);
+                else
+                    maxPage = String.valueOf(2);
             }
-            if (perviousPage!=null)
-                maxPage =  String.valueOf(Integer.parseInt(perviousPage)+2);
-            else
-                maxPage =  String.valueOf(2);
-       // }
+            PageInfo.getInstance().setMaxPageNumber(maxPage);
+            return;
+        }
+
+        if (perviousPage != null)
+            maxPage = String.valueOf(Integer.parseInt(perviousPage) + 2);
+        else
+            maxPage = String.valueOf(2);
         PageInfo.getInstance().setMaxPageNumber(maxPage);
     }
 }

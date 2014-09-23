@@ -38,7 +38,7 @@ public class PageSelectionFragment extends DialogFragment{
                     pageField.setText("");
                     return;
                 }
-                Utils.clearBackStack(getActivity());
+                Utils.clearBackStack();
                 //иначе добавятся в конец
                 PageInfo.getInstance().setStoryInfos(null);
                 Feed feed = new Feed();

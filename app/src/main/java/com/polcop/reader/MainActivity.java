@@ -88,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         actionBar.setHomeButtonEnabled(true);
    }
 
-    private void showCurrentPageInActionBar(String s){
+    public void showCurrentPageInActionBar(String s){
         tvCurrentPage.setText(s);
     }
 
@@ -214,7 +214,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                     if (loaderId==Constants.IT_HAPPENS_LOADER)
                         PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
                     else
-                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);                    showCurrentPageInActionBar("Лучшие");
+                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
+                    showCurrentPageInActionBar("Лучшие");
                     setCurrentPageInActionBarClickable(false);
                     switchContent(link, loaderId);
                     break;
@@ -222,7 +223,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                     if (loaderId==Constants.IT_HAPPENS_LOADER)
                         PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
                     else
-                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);                    showCurrentPageInActionBar("Случайные");
+                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
+                    showCurrentPageInActionBar("Случайные");
                     setCurrentPageInActionBarClickable(false);
                     switchContent(link, loaderId);
                     break;

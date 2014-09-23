@@ -61,7 +61,7 @@ public class SingleStoryFragment extends ListFragment implements View.OnKeyListe
         storyInfoFuture = executorService.submit(new Callable<StoryInfo>() {
             @Override
             public StoryInfo call() throws Exception {
-                Document document = Jsoup.connect(Constants.IT_HAPPENS_LINK+link).timeout(10000).get();
+                Document document = Jsoup.connect(link).timeout(10000).get();
                 Elements elements =document.select("div.content").select(".story");
                 StoryInfo.Builder storyBuilder=new StoryInfo.Builder();
                 storyBuilder.setBadURL("");

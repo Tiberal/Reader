@@ -82,7 +82,7 @@ public class FeedAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        MovementCheck movementCheck = new MovementCheck(context);
+        MovementCheck movementCheck = new MovementCheck();
         View view = convertView;
         if (convertView == null) {
             view = inflater.inflate(R.layout.feed_item, parent, false);

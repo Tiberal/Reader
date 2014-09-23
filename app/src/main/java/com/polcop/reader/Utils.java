@@ -64,8 +64,8 @@ public class Utils {
         ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container, noConnection).commit();
     }
 
-    public static void clearBackStack(Context context){
-        FragmentManager manager = ((MainActivity)context).getSupportFragmentManager();
+    public static void clearBackStack(){
+        FragmentManager manager = ((MainActivity)PageInfo.getInstance().getContext()).getSupportFragmentManager();
         for(int i = 0; i < manager.getBackStackEntryCount(); ++i) {
             manager.popBackStack();
         }

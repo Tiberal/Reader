@@ -51,18 +51,22 @@ public class MovementCheck  extends LinkMovementMethod {
                         Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
                         return true;
                     }
-                    openStoryLink(Constants.IT_HAPPENS_LINK,link);
-                    Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
-                    return true;
+                    if(openStoryLink(Constants.IT_HAPPENS_LINK,link)){
+                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+                    break;
                 case Constants.ZADOLBALI_LOADER:
                     if(Utils.isMainLink(Constants.ZADOLBALI_LINK+link,PageInfo.getInstance().getTagInfos())){
                         loadTagData(Constants.ZADOLBALI_LINK,link);
                         Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
                         return true;
                     }
-                    openStoryLink(Constants.ZADOLBALI_LINK,link);
-                    Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
-                    return true;
+                    if(openStoryLink(Constants.ZADOLBALI_LINK,link)){
+                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+                    break;
             }
 
         }
@@ -70,7 +74,7 @@ public class MovementCheck  extends LinkMovementMethod {
     }
 
     //открывает ссылку на историю
-    private void openStoryLink(String linkPart1, String linkPart2){
+    private boolean openStoryLink(String linkPart1, String linkPart2){
         Pattern pattern = Pattern.compile("^/story/[0-9]+$");
         Matcher matcher = pattern.matcher(linkPart2);
         if(matcher.matches()) {
@@ -80,7 +84,9 @@ public class MovementCheck  extends LinkMovementMethod {
             arg.putString(Constants.LINK, linkPart1+linkPart2);
             singleStoryFragment.setArguments(arg);
             ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container, singleStoryFragment, null).addToBackStack(null).commit();
+            return true;
         }
+        return false;
     }
 
     private void loadTagData(String linkPart1, String linkPart2){

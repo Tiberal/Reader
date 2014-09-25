@@ -4,16 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.List;
 
 /**
  * Created by oleg on 03.09.14.
  */
 public class FeedListView extends ListView {
 
-    private boolean isLoadContent;
+    private boolean loading;
     private OnScrollListener onScrollListener;
     private Pagination pagination;
     private LoadingFooterView loadingFooterView;
@@ -34,7 +31,7 @@ public class FeedListView extends ListView {
     }
 
     private void init() {
-        isLoadContent = true;
+        setLoading(false);
         loadingFooterView = new LoadingFooterView(getContext());
         addFooterView(loadingFooterView);
         this.setVisibility(INVISIBLE);
@@ -49,23 +46,23 @@ public class FeedListView extends ListView {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 int lastVisibleItem = firstVisibleItem + visibleItemCount;
-                if (totalItemCount > 0 && !isLoadContent() && (lastVisibleItem == totalItemCount)) {
+                if (totalItemCount > 0 && !isLoading() && (lastVisibleItem == totalItemCount)) {
                     if(PageInfo.getInstance().getPreviousPage()==null){
                         removeFooterView(loadingFooterView);
                     }
-                    setLoadContent(true);
+                    setLoading(true);
                     pagination.onLoadContent();
                 }
             }
         });
     }
 
-    public boolean isLoadContent() {
-        return isLoadContent;
+    private boolean isLoading() {
+        return loading;
     }
 
-    public void setLoadContent(boolean isLoadContent) {
-        this.isLoadContent = isLoadContent;
+    public void setLoading(boolean isLoading) {
+        this.loading = isLoading;
     }
 
     public void setPagination(Pagination pagination) {

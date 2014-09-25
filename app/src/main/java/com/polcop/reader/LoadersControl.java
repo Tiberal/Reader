@@ -54,7 +54,8 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
             @Override
             public void run() {
                 Utils.dismissLoadingDialog(context);
-                feedListView.setLoadContent(false);
+                //загрузка окончена. разрешить новую
+                feedListView.setLoading(false);
                 feedListView.setVisibility(View.VISIBLE);
                 if (feedListView.getAdapter()==null){
                     //устанавливает адаптер один раз, после первой загрузки контента лодером

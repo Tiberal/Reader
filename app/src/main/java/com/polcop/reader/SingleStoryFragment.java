@@ -21,7 +21,7 @@ import java.util.concurrent.Future;
 /**
  * Created by Oleg on 14.09.2014.
  */
-public class SingleStoryFragment extends ListFragment implements View.OnKeyListener{
+public class SingleStoryFragment extends ListFragment{
 
     private String link;
     private ExecutorService executorService;
@@ -91,15 +91,10 @@ public class SingleStoryFragment extends ListFragment implements View.OnKeyListe
         return list.toArray(new String[]{});
     }
 
-
     @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if( keyCode == KeyEvent.KEYCODE_BACK )
-        {
-            ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setVisibility(View.VISIBLE);
-            ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setClickable(true);
-            return true;
-        }
-        return false;
+    public void onDestroy() {
+        super.onDestroy();
+//        Feed feed = (Feed) getActivity().getSupportFragmentManager().findFragmentByTag(Constants.FEED_TAG);
+//        feed.getListView().setLoading(false);
     }
 }

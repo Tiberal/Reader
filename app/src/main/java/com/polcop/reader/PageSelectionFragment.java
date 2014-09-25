@@ -29,7 +29,7 @@ public class PageSelectionFragment extends DialogFragment{
                 String newPage = pageField.getText().toString();
                 try {
                     int page = Integer.parseInt(newPage);
-                    if(page>Integer.parseInt(PageInfo.getInstance().getMaxPageNumber())){
+                    if(page>Integer.parseInt(PageInfo.getInstance().getMaxPageNumber())||page<=0){
                         Toast.makeText(getActivity(), R.string.page_select_exception,Toast.LENGTH_SHORT).show();
                         return;
                     }

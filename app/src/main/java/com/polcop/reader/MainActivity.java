@@ -208,25 +208,25 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                         PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
                     showCurrentPageInActionBar("Свежие");
                     setCurrentPageInActionBarClickable(true);
-                    switchContent(link, loaderId);
+                    switchContent(PageInfo.getInstance().getCurrentPage(), loaderId);
                     break;
                 case 1:
                     if (loaderId==Constants.IT_HAPPENS_LOADER)
-                        PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                        PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_BEST);
                     else
-                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
+                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_BEST);
                     showCurrentPageInActionBar("Лучшие");
                     setCurrentPageInActionBarClickable(false);
-                    switchContent(link, loaderId);
+                    switchContent(PageInfo.getInstance().getCurrentPage(), loaderId);
                     break;
                 case 2:
                     if (loaderId==Constants.IT_HAPPENS_LOADER)
-                        PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                        PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_RANDOM);
                     else
-                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
+                        PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_RANDOM);
                     showCurrentPageInActionBar("Случайные");
                     setCurrentPageInActionBarClickable(false);
-                    switchContent(link, loaderId);
+                    switchContent(PageInfo.getInstance().getCurrentPage(), loaderId);
                     break;
             }
         }else if (groupPosition==1){

@@ -39,7 +39,7 @@ public class SingleStoryFragment extends ListFragment{
         try {
             ArrayList<StoryInfo> storyInfos = new ArrayList<StoryInfo>();
             storyInfos.add(storyInfoFuture.get());
-            Utils.dismissLoadingDialog(getActivity());
+            Utils.dismissLoadingDialog();
             adapter.updateData(storyInfos);
             adapter.notifyDataSetChanged();
         } catch (InterruptedException e) {

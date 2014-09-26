@@ -3,16 +3,10 @@ package com.polcop.reader;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.Spanned;
-import android.widget.Toast;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;

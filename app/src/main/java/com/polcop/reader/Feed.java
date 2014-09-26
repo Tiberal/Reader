@@ -91,11 +91,7 @@ public class Feed extends Fragment {
             isFirstLoad = false;
         }else{
             //отобразить ленту там, где был переход по ссылке
-            FeedAdapter  adapter = new FeedAdapter(getActivity(),null);
-            listView.setAdapter(adapter);
-            listView.setVisibility(View.VISIBLE);
-            adapter.updateData(PageInfo.getInstance().getStoryInfos());
-            adapter.notifyDataSetChanged();
+            listView.updateFeedListView(loadersControl.getAdapter());
         }
         return view;
     }

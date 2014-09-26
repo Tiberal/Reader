@@ -53,18 +53,12 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
         ((MainActivity)context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Utils.dismissLoadingDialog(context);
-                //загрузка окончена. разрешить новую
-                feedListView.setLoading(false);
-                feedListView.setVisibility(View.VISIBLE);
-                if (feedListView.getAdapter()==null){
-                    //устанавливает адаптер один раз, после первой загрузки контента лодером
-                    feedListView.setAdapter(feedAdapter);
-                }
-                feedAdapter.updateData(PageInfo.getInstance().getStoryInfos());
-                feedAdapter.notifyDataSetChanged();
+                feedListView.updateFeedListView(feedAdapter);
             }
         });
     }
 
+    public FeedAdapter getAdapter() {
+        return feedAdapter;
+    }
 }

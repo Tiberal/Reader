@@ -2,6 +2,7 @@ package com.polcop.reader;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
@@ -55,6 +56,19 @@ public class FeedListView extends ListView {
                 }
             }
         });
+    }
+
+    public void updateFeedListView(FeedAdapter feedAdapter){
+        Utils.dismissLoadingDialog();
+        //загрузка окончена. разрешить новую
+        setLoading(false);
+        setVisibility(View.VISIBLE);
+        if (getAdapter()==null){
+            //устанавливает адаптер один раз, после первой загрузки контента лодером
+            setAdapter(feedAdapter);
+        }
+        feedAdapter.updateData(PageInfo.getInstance().getStoryInfos());
+        feedAdapter.notifyDataSetChanged();
     }
 
     private boolean isLoading() {

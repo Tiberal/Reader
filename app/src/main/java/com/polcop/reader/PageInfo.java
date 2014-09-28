@@ -15,7 +15,6 @@ public class PageInfo {
     private ArrayList<TagInfo> tagInfos = null;
     private String currentPage;
     private String maxPageNumber;
-    private String currentPageNumber;
     private String previousPage;
     private boolean maxPageMark = true;
 
@@ -75,14 +74,6 @@ public class PageInfo {
         }
     }
 
-    public String getCurrentPageNumber() {
-        return currentPageNumber;
-    }
-
-    public void setCurrentPageNumber(String currentPageNumber) {
-        this.currentPageNumber = currentPageNumber;
-    }
-
     public String getPreviousPage() {
         return previousPage;
     }
@@ -101,6 +92,14 @@ public class PageInfo {
 
     public  void clearStoryInfo(){
         setStoryInfos(null);
+        maxPageMark = true;
+    }
+
+    public void clearPageData(){
+        setStoryInfos(null);
+        setTagInfos(null);
+        setMaxPageNumber(null);
+        setPreviousPage(null);
         maxPageMark = true;
     }
 }

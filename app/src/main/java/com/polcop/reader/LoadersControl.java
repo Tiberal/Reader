@@ -5,6 +5,7 @@ import android.support.v4.content.Loader;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * Created by oleg on 04.09.14.
@@ -25,7 +26,7 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
     @Override
     public Loader<Boolean> onCreateLoader(int id, Bundle bundle) {
         link = bundle.getString(Constants.LINK);
-        int i = Utils.getLoaderId();
+        Toast.makeText(context,"start loader",Toast.LENGTH_SHORT).show();
         switch (Utils.getLoaderId()){
             case Constants.IT_HAPPENS_LOADER:
                 return new ItHappensAndZadolbaliLoader(context,link, Constants.IT_HAPPENS_TAG);

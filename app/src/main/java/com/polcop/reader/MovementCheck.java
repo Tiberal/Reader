@@ -78,7 +78,6 @@ public class MovementCheck  extends LinkMovementMethod {
         Pattern pattern = Pattern.compile("^/story/[0-9]+$");
         Matcher matcher = pattern.matcher(linkPart2);
         if(matcher.matches()) {
-            showLoadingDialog();
             SingleStoryFragment singleStoryFragment = new SingleStoryFragment();
             Bundle arg = new Bundle();
             arg.putString(Constants.LINK, linkPart1+linkPart2);
@@ -99,11 +98,6 @@ public class MovementCheck  extends LinkMovementMethod {
         feed.setArguments(arg);
         ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();
         ((MainActivity) context).showCurrentPageInActionBar(getTagNameByLink(linkPart1 + linkPart2));
-    }
-
-    private void showLoadingDialog(){
-        LoadingDialog loadingDialod = LoadingDialog.getDialod();
-        loadingDialod.show(((MainActivity)context).getSupportFragmentManager(),Constants.LOADING_DIALOG_TAG);
     }
 
     private String getTagNameByLink(String link){

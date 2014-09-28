@@ -39,13 +39,17 @@ public class ItHappensAndZadolbaliLoader extends AsyncTaskLoader<Boolean> implem
 
     @Override
     protected void onStartLoading() {
-        forceLoad();
+        if(maxPage==null&&perviousPage==null){
+            forceLoad();
+        }
     }
 
     @Override
     protected void onForceLoad() {
         super.onForceLoad();
     }
+
+
 
     @Override
     public Boolean loadInBackground() {

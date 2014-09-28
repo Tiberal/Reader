@@ -11,10 +11,12 @@ import android.support.v4.app.DialogFragment;
 public class LoadingDialog extends DialogFragment{
 
     private ProgressDialog dialog;
+    private static LoadingDialog instance;
 
     public static LoadingDialog getDialod(){
-        LoadingDialog loadingDialod = new LoadingDialog();
-        return loadingDialod;
+        if(instance==null)
+            instance = new LoadingDialog();
+        return instance;
     }
 
     @Override

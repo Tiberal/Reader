@@ -50,13 +50,6 @@ public class Utils {
         preferences.edit().putInt(Constants.LOADER_ID, loaderId).commit();
     }
 
-    public static void  dismissLoadingDialog(){
-        LoadingDialog loadingDialod = (LoadingDialog) ((MainActivity) PageInfo.getInstance().getContext()).getSupportFragmentManager().findFragmentByTag(Constants.LOADING_DIALOG_TAG);
-        if(loadingDialod!=null){
-            ((MainActivity) PageInfo.getInstance().getContext()).getSupportFragmentManager().beginTransaction().remove(loadingDialod).commitAllowingStateLoss();
-        }
-    }
-
     public static void showNoConnectionFragment(Bundle bundle, Context context){
         Toast.makeText(context, context.getString(R.string.no_network), Toast.LENGTH_LONG).show();
         NoConnectionFragment noConnection = new NoConnectionFragment();

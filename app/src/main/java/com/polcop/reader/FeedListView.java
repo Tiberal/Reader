@@ -59,7 +59,7 @@ public class FeedListView extends ListView {
     }
 
     public void updateFeedListView(FeedAdapter feedAdapter){
-        Utils.dismissLoadingDialog();
+        ((MainActivity)getContext()).getSupportFragmentManager().beginTransaction().remove(LoadingDialog.getDialod()).commitAllowingStateLoss();
         //загрузка окончена. разрешить новую
         setLoading(false);
         setVisibility(View.VISIBLE);

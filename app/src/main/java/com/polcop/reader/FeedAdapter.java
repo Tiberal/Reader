@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.jsoup.Jsoup;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -126,6 +128,10 @@ public class FeedAdapter extends BaseAdapter {
     }
 
     private void setRate(ViewHolder viewHolder, int position) {
+        //todo!!!!
+//        if(clickInfos.size()!=storyInfos.size()){
+//            updateClickInfos();
+//        }
         viewHolder.ibBad.setVisibility(View.INVISIBLE);
         viewHolder.ibGood.setVisibility(View.VISIBLE);
         if(storyInfos.get(position).getGoodURL().equals("")){

@@ -16,19 +16,23 @@ public class Feed extends Fragment {
 
     private FeedListView listView;
     private LoadersControl loadersControl;
-    private boolean isFirstLoad = true;
     private LoadingDialog loadingDialod;
     private String loadLink;
+    private boolean firstLoad = true;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadingDialod = LoadingDialog.getDialod();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+//        if(PageInfo.getInstance().getStoryInfos()!=null){
+//            getListView().updateFeedListView(loadersControl.getAdapter());
+//        }
         ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setVisibility(View.VISIBLE);
         ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setClickable(true);
     }
@@ -41,7 +45,7 @@ public class Feed extends Fragment {
         listView.setDividerHeight(10);
         listView.getLoadingFooterView().setOnReloadListener(new LoadingFooterView.OnReloadListener() {
             @Override
-            public void OnReload() {
+            public void onReload() {
                 if(Utils.isOnline()){
                     listView.getLoadingFooterView().setInvisibleReloadButton();
                     listView.getLoadingFooterView().setVisibleLoadingLoadingViews();
@@ -56,7 +60,6 @@ public class Feed extends Fragment {
         listView.setPagination(new FeedListView.Pagination() {
             @Override
             public void onLoadContent() {
-                //final String loadLink;
                 int id = Utils.getLoaderId();
                 switch (id){
                     case Constants.IT_HAPPENS_LOADER:
@@ -82,15 +85,15 @@ public class Feed extends Fragment {
                 loadData(loadLink,Utils.getLoaderId());
                 }
         });
-        if(isFirstLoad){
+        if(firstLoad){
             //выполняется при создании фрагмента и первой загрузке
             Bundle arg = getArguments();
-            loadingDialod = LoadingDialog.getDialod();
             loadingDialod.show(getActivity().getSupportFragmentManager(), Constants.LOADING_DIALOG_TAG);
             loadData(arg.getString(Constants.LINK),arg.getInt(Constants.LOADER_ID));
-            isFirstLoad = false;
+            firstLoad=false;
         }else{
-            //отобразить ленту там, где был переход по ссылке
+            //todo после возвращения из дома если есть истории показить их
+            //отобразить ленту если был возрат с одиночной истории
             listView.updateFeedListView(loadersControl.getAdapter());
         }
         return view;

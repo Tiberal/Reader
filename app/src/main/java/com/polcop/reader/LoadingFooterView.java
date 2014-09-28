@@ -5,8 +5,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by oleg on 04.09.14.
@@ -18,7 +16,7 @@ public class LoadingFooterView extends LinearLayout implements View.OnClickListe
     private OnReloadListener onReloadListener;
 
     public  interface OnReloadListener{
-        public void OnReload();
+        public void onReload();
     }
 
     public LoadingFooterView(Context context) {
@@ -59,7 +57,7 @@ public class LoadingFooterView extends LinearLayout implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        onReloadListener.OnReload();
+        onReloadListener.onReload();
     }
 
     public void setOnReloadListener(OnReloadListener onReloadListener){

@@ -60,6 +60,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(PageInfo.getInstance().getTagInfos()!=null){
+            anotherContent(PageInfo.getInstance().getTagInfos());
+        }
+    }
+
     private void setActionBarOptions(){
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#c8c8c8")));
@@ -130,7 +138,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         drawerExpandableListView.expandGroup(0);
     }
 
-    //обработчик нажатий на список
+    //обработчик нажатий на Dropdown Navigation
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
         switch (position){
@@ -175,7 +183,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             switch (Utils.getLoaderId()){
                 case Constants.IT_HAPPENS_LOADER:
                     itHappensAndZadolbaliClick(groupPosition,childPosition,Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
-                    //todo click listener
                     break;
                 case Constants.ZADOLBALI_LOADER:
                     itHappensAndZadolbaliClick(groupPosition,childPosition,Constants.ZADOLBALI_LINK, Constants.ZADOLBALI_LOADER);
@@ -189,7 +196,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                     //killMePlzClick(groupPosition,childPosition);
                     break;
             }
-            return false;
+            return true;
         }
 
         @Override

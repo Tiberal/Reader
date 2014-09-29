@@ -1,11 +1,18 @@
-package com.polcop.reader;
+package com.polcop.reader.background;
 
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
+
+import com.polcop.reader.Constants;
+import com.polcop.reader.MainActivity;
+import com.polcop.reader.PageInfo;
+import com.polcop.reader.UI.FeedListView;
+import com.polcop.reader.Utils;
+import com.polcop.reader.adapters.FeedAdapter;
+import com.polcop.reader.background.ItHappensAndZadolbaliLoader;
 
 /**
  * Created by oleg on 04.09.14.
@@ -20,7 +27,7 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
     public LoadersControl(Context context, FeedListView feedListView) {
         this.context = context;
         this.feedListView=feedListView;
-        feedAdapter = new FeedAdapter(context,PageInfo.getInstance().getStoryInfos());
+        feedAdapter = new FeedAdapter(context, PageInfo.getInstance().getStoryInfos());
     }
 
     @Override

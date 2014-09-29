@@ -1,4 +1,4 @@
-package com.polcop.reader;
+package com.polcop.reader.adapters;
 
 import android.content.Context;
 import android.text.SpannableStringBuilder;
@@ -8,7 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.polcop.reader.Constants;
+import com.polcop.reader.UI.MovementCheck;
+import com.polcop.reader.R;
+import com.polcop.reader.StoryInfo;
 
 import org.jsoup.Jsoup;
 import java.io.IOException;

@@ -22,4 +22,11 @@ public class Constants {
     public static final String ZADOLBALI_BEST = "http://zadolba.li/best";
     public static final String ZADOLBALI_RANDOM = "http://zadolba.li/random";
     public static final String ZADDOLBALI_TAG = "http://zadolba.li/tags";
+    public static final long ZADDOLBALI_FIRST_STORY_DATE = 1252353600000L;
+    public static final String BASH_BY_RATING = "http://bash.im/byrating/";
+    public static final String BASH_ABYSS_TOP = "http://bash.im/abysstop";
+    public static final String BASH_ABYSS_BEST = "http://bash.im/abyssbest/";
+    public static final String BASH_LINK = "http://bash.im/index/";
+    public static final String BASH_RANDOM = "http://bash.im/random";
+    public static final String BASH_ABBYS = "http://bash.im/abyss";
 }

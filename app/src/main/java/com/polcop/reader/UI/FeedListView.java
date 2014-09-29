@@ -1,10 +1,15 @@
-package com.polcop.reader;
+package com.polcop.reader.UI;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+
+import com.polcop.reader.fragments.LoadingDialog;
+import com.polcop.reader.MainActivity;
+import com.polcop.reader.PageInfo;
+import com.polcop.reader.adapters.FeedAdapter;
 
 /**
  * Created by oleg on 03.09.14.

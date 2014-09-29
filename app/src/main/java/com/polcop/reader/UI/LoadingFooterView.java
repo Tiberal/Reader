@@ -1,10 +1,12 @@
-package com.polcop.reader;
+package com.polcop.reader.UI;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.polcop.reader.R;
 
 /**
  * Created by oleg on 04.09.14.
@@ -30,7 +32,7 @@ public class LoadingFooterView extends LinearLayout implements View.OnClickListe
     }
 
     private void init() {
-        View view = inflate(getContext(),R.layout.loading_footer_view,this);
+        View view = inflate(getContext(), R.layout.loading_footer_view,this);
         reload = (Button)view.findViewById(R.id.reload);
         reload.setOnClickListener(this);
         setInvisibleReloadButton();

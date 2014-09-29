@@ -1,4 +1,4 @@
-package com.polcop.reader;
+package com.polcop.reader.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import com.polcop.reader.Constants;
+import com.polcop.reader.R;
+import com.polcop.reader.TagInfo;
+import com.polcop.reader.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,15 +22,17 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private ArrayList<TagInfo> tagInfos;
-    private String[] group = new String[] { "" ,"Тэги"};
-    private String[] zadolbaliMainLinks = new String[]{"Свежие", "Лучшие", "Случайные"};
-    private String[] itHappensMainLinks = new String[]{"Свежие", "Лучшие", "Случайные"};
-    private String[] killMePlzMainLinks = new String[]{"Новые", "Самые страшные", "Случайная"};
+    private String[] group;
+    private String[] ZadolbaliAndItHappensItems;
+    private String[] killMePlzMainItems;
     private HashMap<String, ArrayList<String>> data;
     private LayoutInflater layoutInflater;
 
 
     public TagExpandableListAdapter(ArrayList<TagInfo> tagInfos, Context context){
+        group = context.getResources().getStringArray(R.array.expandable_list_items);
+        ZadolbaliAndItHappensItems = context.getResources().getStringArray(R.array.zadolbali_it_happens_items);
+        killMePlzMainItems = context.getResources().getStringArray(R.array.kill_ma_plz_items);
         this.tagInfos = tagInfos;
         this.context = context;
         data = prepareData(tagInfos);
@@ -71,11 +78,24 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
     private HashMap<String, ArrayList<String>> prepareData(ArrayList<TagInfo> tagInfos){
         HashMap<String, ArrayList<String>> data = new HashMap<String, ArrayList<String>>();
         ArrayList<String> child = new ArrayList<String>();
+        switch (Utils.getLoaderId()){
+            case Constants.IT_HAPPENS_LOADER:
+            case Constants.ZADOLBALI_LOADER:
+                for (int i = 0; i < ZadolbaliAndItHappensItems.length; i++) {
+                    child.add(ZadolbaliAndItHappensItems[i]);
+                }
+                data.put(group[0], child);
+            break;
+            case Constants.BASH_LOADER:
+                for (int i = 0; i < tagInfos.size(); i++) {
+                    child.add(tagInfos.get(i).getTagName());
+                }
+                data.put(group[0], child);
+                return data;
+            case Constants.KILL_ME_PLZ_LOADER:
+            break;
+        }
 
-        for (int i = 0; i < itHappensMainLinks.length; i++) {
-            child.add(itHappensMainLinks[i]);
-            }
-            data.put(group[0], child);
         child = new ArrayList<String>();
         for (int i = 0; i < tagInfos.size(); i++) {
             child.add(tagInfos.get(i).getTagName());

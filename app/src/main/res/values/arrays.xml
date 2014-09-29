@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="zadolbali_it_happens_items">
+        <item>Свежие</item>
+        <item>Лучшие</item>
+        <item>Случайные</item>
+    </string-array>
+
+    <string-array name="kill_ma_plz_items">
+        <item>Новые</item>
+        <item>Самые страшные</item>
+        <item>Случайная</item>
+    </string-array>
+
+    <string-array name="expandable_list_items">
+        <item></item>
+        <item>Тэги</item>
+    </string-array>
+
+    <string-array name="quotations">
+        <item>ItHappens</item>
+        <item>Задолба!ли</item>
+        <item>Bash</item>
+        <item>KillMePlz</item>
+    </string-array>
+
+
+</resources>

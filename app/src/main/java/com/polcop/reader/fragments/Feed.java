@@ -1,4 +1,4 @@
-package com.polcop.reader;
+package com.polcop.reader.fragments;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -8,6 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.polcop.reader.Constants;
+import com.polcop.reader.background.LoadersControl;
+import com.polcop.reader.MainActivity;
+import com.polcop.reader.PageInfo;
+import com.polcop.reader.R;
+import com.polcop.reader.UI.FeedListView;
+import com.polcop.reader.UI.LoadingFooterView;
+import com.polcop.reader.Utils;
 
 /**
  * Created by oleg on 03.09.14.

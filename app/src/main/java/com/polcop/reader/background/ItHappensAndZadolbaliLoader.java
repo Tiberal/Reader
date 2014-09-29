@@ -1,8 +1,15 @@
-package com.polcop.reader;
+package com.polcop.reader.background;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.text.Html;
+
+import com.polcop.reader.Constants;
+import com.polcop.reader.PageInfo;
+import com.polcop.reader.StoryInfo;
+import com.polcop.reader.TagInfo;
+import com.polcop.reader.Utils;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -161,12 +168,14 @@ public class ItHappensAndZadolbaliLoader extends AsyncTaskLoader<Boolean> implem
             Matcher matcher = pattern.matcher(link);
             if (matcher.matches()) {
                 maxPage = document.select("body").get(0).attr("data-today-date");
+                PageInfo.getInstance().setMaxPageNumber(maxPage);
                 return;
             } else {
-                int page = Integer.parseInt(perviousPage.substring(perviousPage.lastIndexOf("/")+1));
-                if (perviousPage != null)
+
+                if (perviousPage != null) {
+                    int page = Integer.parseInt(perviousPage.substring(perviousPage.lastIndexOf("/") + 1));
                     maxPage = String.valueOf(page + 2);
-                else
+                }else
                     maxPage = String.valueOf(2);
             }
             PageInfo.getInstance().setMaxPageNumber(maxPage);

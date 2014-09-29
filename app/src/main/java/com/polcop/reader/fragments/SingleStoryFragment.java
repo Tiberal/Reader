@@ -1,11 +1,16 @@
-package com.polcop.reader;
+package com.polcop.reader.fragments;
 
 
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.KeyEvent;
 import android.view.View;
+
+import com.polcop.reader.Constants;
+import com.polcop.reader.MainActivity;
+import com.polcop.reader.StoryInfo;
+import com.polcop.reader.adapters.FeedAdapter;
+import com.polcop.reader.fragments.LoadingDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

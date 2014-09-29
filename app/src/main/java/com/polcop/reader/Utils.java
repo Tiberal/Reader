@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
+import com.polcop.reader.fragments.NoConnectionFragment;
+
 import java.util.ArrayList;
 
 /**

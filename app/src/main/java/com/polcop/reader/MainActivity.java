@@ -16,6 +16,10 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.polcop.reader.UI.PageObserver;
+import com.polcop.reader.adapters.TagExpandableListAdapter;
+import com.polcop.reader.fragments.Feed;
+
 import java.util.ArrayList;
 
 
@@ -26,12 +30,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     private ExpandableListView drawerExpandableListView;
     private Feed feed;
     private TextView tvCurrentPage;
-    private PageSelectionFragment pageSelectionFragment;
-    private String[] quotations = {"ItHappens","Задолба!ли","Bash","KillMePlz"};
+    private PageObserver pageObserver;
+    private String[] quotations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        quotations = getResources().getStringArray(R.array.quotations);
         setContentView(R.layout.activity_main);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerExpandableListView = (ExpandableListView)findViewById(R.id.left_drawer);
@@ -78,10 +83,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),"action",Toast.LENGTH_SHORT).show();
-                if(pageSelectionFragment==null){
-                    pageSelectionFragment = new PageSelectionFragment();
+
+                if(pageObserver==null){
+                    pageObserver=new PageObserver();
                 }
-                pageSelectionFragment.show(getSupportFragmentManager(),null);
+                pageObserver.switchPage();
+
+//                if(pageSelectionFragment==null){
+//                    pageSelectionFragment = new PageSelectionFragment();
+//                }
+//                pageSelectionFragment.show(getSupportFragmentManager(),null);
             }
         });
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
@@ -145,6 +156,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             case 0:
                 Toast.makeText(this,"ItHappens",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
+                showCurrentPageInActionBar("Свежие");
                 //PageInfo.getInstance().setStoryInfos(null);
                 //Utils.setLoaderId(Constants.IT_HAPPENS_LOADER);
                 switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
@@ -152,6 +164,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             case 1:
                 Toast.makeText(this,"Задолба!ли",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
+                showCurrentPageInActionBar("Свежие");
                 //PageInfo.getInstance().setStoryInfos(null);
                 //Utils.setLoaderId(Constants.ZADOLBALI_LOADER);
                 switchContent(Constants.ZADOLBALI_LINK, Constants.ZADOLBALI_LOADER);

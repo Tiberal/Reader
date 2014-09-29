@@ -1,4 +1,4 @@
-package com.polcop.reader;
+package com.polcop.reader.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.polcop.reader.R;
+import com.polcop.reader.Utils;
 
 /**
  * Created by oleg on 16.09.14.

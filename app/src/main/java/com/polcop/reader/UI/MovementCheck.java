@@ -1,4 +1,4 @@
-package com.polcop.reader;
+package com.polcop.reader.UI;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,15 @@ import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.polcop.reader.Constants;
+import com.polcop.reader.fragments.Feed;
+import com.polcop.reader.MainActivity;
+import com.polcop.reader.PageInfo;
+import com.polcop.reader.R;
+import com.polcop.reader.fragments.SingleStoryFragment;
+import com.polcop.reader.TagInfo;
+import com.polcop.reader.Utils;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -22,7 +31,7 @@ public class MovementCheck  extends LinkMovementMethod {
     private Context context;
 
     public MovementCheck() {
-        this.context=PageInfo.getInstance().getContext();
+        this.context= PageInfo.getInstance().getContext();
     }
 
     @Override

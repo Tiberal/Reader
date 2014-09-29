@@ -1,9 +1,11 @@
-package com.polcop.reader;
+package com.polcop.reader.fragments;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+
+import com.polcop.reader.R;
 
 /**
  * Created by oleg on 12.09.14.

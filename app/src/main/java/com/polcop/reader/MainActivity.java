@@ -32,10 +32,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     private TextView tvCurrentPage;
     private PageObserver pageObserver;
     private String[] quotations;
+    private String[] bashTAgs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bashTAgs = getResources().getStringArray(R.array.bash_link);
         quotations = getResources().getStringArray(R.array.quotations);
         setContentView(R.layout.activity_main);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -83,16 +85,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),"action",Toast.LENGTH_SHORT).show();
-
                 if(pageObserver==null){
                     pageObserver=new PageObserver();
                 }
                 pageObserver.switchPage();
-
-//                if(pageSelectionFragment==null){
-//                    pageSelectionFragment = new PageSelectionFragment();
-//                }
-//                pageSelectionFragment.show(getSupportFragmentManager(),null);
             }
         });
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
@@ -157,21 +153,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                 Toast.makeText(this,"ItHappens",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
                 showCurrentPageInActionBar("Свежие");
-                //PageInfo.getInstance().setStoryInfos(null);
-                //Utils.setLoaderId(Constants.IT_HAPPENS_LOADER);
                 switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
                 break;
             case 1:
                 Toast.makeText(this,"Задолба!ли",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
                 showCurrentPageInActionBar("Свежие");
-                //PageInfo.getInstance().setStoryInfos(null);
-                //Utils.setLoaderId(Constants.ZADOLBALI_LOADER);
                 switchContent(Constants.ZADOLBALI_LINK, Constants.ZADOLBALI_LOADER);
                 break;
             case 2:
-                Toast.makeText(this,"Bash",Toast.LENGTH_SHORT).show();
-                //switchContent(Constants.BASH_LINK, Constants.BASH_LOADER);
+                Toast.makeText(this,"Bash",Toast.LENGTH_SHORT).show();PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
+                PageInfo.getInstance().setCurrentPage(Constants.BASH_LINK);
+                showCurrentPageInActionBar("Новые");
+                switchContent(Constants.BASH_LINK, Constants.BASH_LOADER);
                 break;
             case 3:
                 Toast.makeText(this,"KillMePlz",Toast.LENGTH_SHORT).show();
@@ -195,15 +189,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
             switch (Utils.getLoaderId()){
                 case Constants.IT_HAPPENS_LOADER:
-                    itHappensAndZadolbaliClick(groupPosition,childPosition,Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
+                    itHappensAndZadolbaliClick(groupPosition,childPosition, Constants.IT_HAPPENS_LOADER);
                     break;
                 case Constants.ZADOLBALI_LOADER:
-                    itHappensAndZadolbaliClick(groupPosition,childPosition,Constants.ZADOLBALI_LINK, Constants.ZADOLBALI_LOADER);
-
-                    //zadolbaliClick(groupPosition,childPosition);
+                    itHappensAndZadolbaliClick(groupPosition,childPosition, Constants.ZADOLBALI_LOADER);
                     break;
                 case Constants.BASH_LOADER:
-                    //bashClick(childPosition);
+                    bashClick(childPosition);
                     break;
                 case Constants.KILL_ME_PLZ_LOADER:
                     //killMePlzClick(groupPosition,childPosition);
@@ -218,10 +210,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         }
     }
 
-    private void itHappensAndZadolbaliClick(int groupPosition, int childPosition, String link, int loaderId){
+    private void itHappensAndZadolbaliClick(int groupPosition, int childPosition, int loaderId){
         if (groupPosition==0){
             switch (childPosition){
                 case 0:
+                    //todo if before switch
                     if (loaderId==Constants.IT_HAPPENS_LOADER)
                         PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
                     else
@@ -258,8 +251,21 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         }
     }
 
+    private  void  bashClick(int childPosition){
+        if(childPosition==1||childPosition==4||childPosition==7){
+            setCurrentPageInActionBarClickable(true);
+        }else{
+            setCurrentPageInActionBarClickable(false);
+        }
+        PageInfo.getInstance().setCurrentPage(PageInfo.getInstance().getTagInfos().get(childPosition).getTagURL());
+        showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagName());
+        switchContent(PageInfo.getInstance().getTagInfos().get(childPosition).getTagURL(),Constants.BASH_LOADER);
+
+    }
+
     private void switchContent(String link, int id){
        drawerLayout.closeDrawers();
+       PageInfo.getInstance().clearStoryInfo();
        if (feed!=null){
             getSupportFragmentManager().beginTransaction().remove(feed);
         }

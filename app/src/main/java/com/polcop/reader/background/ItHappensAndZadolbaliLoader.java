@@ -93,12 +93,13 @@ public class ItHappensAndZadolbaliLoader extends AsyncTaskLoader<Boolean> implem
                 storyBuilder.setStoryNumber("#" + element.select(".id").text());
                 storyBuilder.setTags(getHtmlLinkArray(element));
                 storyBuilder.setStory(Html.fromHtml(element.select(".text").html()));
-                storyBuilder.setStoryName(element.children().get(1).text());
+                storyBuilder.setStoryTitle(element.children().get(1).text());
                 storyInfos.add(storyBuilder.build());
             }
-            if (Utils.isMainLink(link, tagInfos)) {
-                PageInfo.getInstance().clearStoryInfo();
-            }
+            //if (Utils.isMainLink(link, tagInfos)) {
+            //    PageInfo.getInstance().clearStoryInfo();
+                //todo clear story info in seitc content
+           // }
             setPerviousPage(document);
             setMaxPage(document);
         } catch (IOException e) {

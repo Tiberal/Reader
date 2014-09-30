@@ -39,6 +39,8 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
                 return new ItHappensAndZadolbaliLoader(context,link, Constants.IT_HAPPENS_TAG);
             case  Constants.ZADOLBALI_LOADER:
                 return new ItHappensAndZadolbaliLoader(context, link, Constants.ZADDOLBALI_TAG);
+            case  Constants.BASH_LOADER:
+                return new BashLoader(context, link);
         }
         return null;
     }

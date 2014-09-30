@@ -25,5 +25,24 @@
         <item>KillMePlz</item>
     </string-array>
 
+    <string-array name="bash_tag">
+        <item>Новые</item>
+        <item>Случайные</item>
+        <item>Лучшие</item>
+        <item>По рейтингу</item>
+        <item>Бездна</item>
+        <item>Топ Бездны</item>
+        <item>Лучшие Бездны</item>
+    </string-array>
+
+    <string-array name="bash_link">
+        <item>http://bash.im/index</item>
+        <item>http://bash.im/random</item>
+        <item>http://bash.im/best</item>
+        <item>http://bash.im/byrating</item>
+        <item>http://bash.im/abyss</item>
+        <item>http://bash.im/abysstop</item>
+        <item>http://bash.im/abyssbest</item>
+    </string-array>
 
 </resources>

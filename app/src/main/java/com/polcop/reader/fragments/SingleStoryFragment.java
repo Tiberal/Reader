@@ -10,7 +10,6 @@ import com.polcop.reader.Constants;
 import com.polcop.reader.MainActivity;
 import com.polcop.reader.StoryInfo;
 import com.polcop.reader.adapters.FeedAdapter;
-import com.polcop.reader.fragments.LoadingDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -76,7 +75,7 @@ public class SingleStoryFragment extends ListFragment{
                 storyBuilder.setStoryNumber("#" + elements.get(0).select(".id").text());
                 storyBuilder.setTags(getHtmlLinkArray(elements.get(0)));
                 storyBuilder.setStory(Html.fromHtml(elements.get(0).select(".text").html()));
-                storyBuilder.setStoryName(elements.get(0).children().get(1).text());
+                storyBuilder.setStoryTitle(elements.get(0).children().get(1).text());
                 return storyBuilder.build();
             }
         });

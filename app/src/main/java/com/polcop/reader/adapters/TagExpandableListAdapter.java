@@ -86,14 +86,15 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
                 }
                 data.put(group[0], child);
             break;
+            case Constants.KILL_ME_PLZ_LOADER:
+                break;
             case Constants.BASH_LOADER:
                 for (int i = 0; i < tagInfos.size(); i++) {
                     child.add(tagInfos.get(i).getTagName());
                 }
                 data.put(group[0], child);
                 return data;
-            case Constants.KILL_ME_PLZ_LOADER:
-            break;
+
         }
 
         child = new ArrayList<String>();
@@ -106,7 +107,7 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        if(groupPosition==0) return new View(context);
+        if(groupPosition==0||Utils.getLoaderId() == Constants.BASH_LOADER) return new View(context);
         String headerTitle = (String) getGroup(groupPosition);
         convertView = layoutInflater
                 .inflate(R.layout.drawer_section, null);

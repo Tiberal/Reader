@@ -2,14 +2,17 @@ package com.polcop.reader.adapters;
 
 import android.content.Context;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.polcop.reader.Constants;
+import com.polcop.reader.PageInfo;
 import com.polcop.reader.UI.MovementCheck;
 import com.polcop.reader.R;
 import com.polcop.reader.StoryInfo;
@@ -126,7 +129,9 @@ public class FeedAdapter extends BaseAdapter {
     //совмещает низвание истории и историю
     private SpannableStringBuilder createSpannableStory(int position){
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(storyInfos.get(position).getStoryName());
+        Spanned storyTitle = storyInfos.get(position).getStoryTitle();
+        if(storyTitle!=null)
+            builder.append(storyInfos.get(position).getStoryTitle());
         builder.append(storyInfos.get(position).getStory());
         return builder;
     }
@@ -184,6 +189,7 @@ public class FeedAdapter extends BaseAdapter {
                 try {
                     Jsoup.connect(link).get();
                 } catch (IOException e) {
+                    Toast.makeText(PageInfo.getInstance().getContext(),"косяк",Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }

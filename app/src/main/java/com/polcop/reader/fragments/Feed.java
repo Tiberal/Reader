@@ -81,6 +81,13 @@ public class Feed extends Fragment {
                     case Constants.ZADOLBALI_LOADER:
                         loadLink = Constants.ZADOLBALI_LINK+PageInfo.getInstance().getPreviousPage();
                         break;
+                    case Constants.BASH_LOADER:
+                        if(PageInfo.getInstance().getCurrentPage().equals(Constants.BASH_ABYSS_BEST))
+                            loadLink = Constants.BASH_ABYSS_BEST+"/"+PageInfo.getInstance().getPreviousPage();
+                        if(PageInfo.getInstance().getCurrentPage().equals(Constants.BASH_BY_RATING))
+                            loadLink = Constants.BASH_BY_RATING+"/"+PageInfo.getInstance().getPreviousPage();
+                        if(PageInfo.getInstance().getCurrentPage().equals(Constants.BASH_LINK))
+                        loadLink = Constants.BASH_LINK+"/"+PageInfo.getInstance().getPreviousPage();
                 }
 
                 if(!Utils.isOnline()){

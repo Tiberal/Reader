@@ -148,6 +148,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     //обработчик нажатий на Dropdown Navigation
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
+        setCurrentPageInActionBarClickable(true);
         switch (position){
             case 0:
                 Toast.makeText(this,"ItHappens",Toast.LENGTH_SHORT).show();
@@ -211,6 +212,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     }
 
     private void itHappensAndZadolbaliClick(int groupPosition, int childPosition, int loaderId){
+        if(childPosition==0){
+            setCurrentPageInActionBarClickable(true);
+        }else{
+            setCurrentPageInActionBarClickable(false);
+        }
         if (groupPosition==0){
             switch (childPosition){
                 case 0:
@@ -220,7 +226,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                     else
                         PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
                     showCurrentPageInActionBar("Свежие");
-                    setCurrentPageInActionBarClickable(true);
                     switchContent(PageInfo.getInstance().getCurrentPage(), loaderId);
                     break;
                 case 1:
@@ -229,7 +234,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                     else
                         PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_BEST);
                     showCurrentPageInActionBar("Лучшие");
-                    setCurrentPageInActionBarClickable(false);
                     switchContent(PageInfo.getInstance().getCurrentPage(), loaderId);
                     break;
                 case 2:
@@ -238,7 +242,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                     else
                         PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_RANDOM);
                     showCurrentPageInActionBar("Случайные");
-                    setCurrentPageInActionBarClickable(false);
                     switchContent(PageInfo.getInstance().getCurrentPage(), loaderId);
                     break;
             }
@@ -252,7 +255,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     }
 
     private  void  bashClick(int childPosition){
-        if(childPosition==1||childPosition==4||childPosition==7){
+        if(childPosition==0||childPosition==3||childPosition==6){
             setCurrentPageInActionBarClickable(true);
         }else{
             setCurrentPageInActionBarClickable(false);

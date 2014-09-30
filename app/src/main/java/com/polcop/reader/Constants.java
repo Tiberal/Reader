@@ -30,6 +30,6 @@ public class Constants {
     public static final String BASH_LINK = "http://bash.im/index";
     public static final String BASH_RANDOM = "http://bash.im/random";
     public static final String BASH_ABBYS = "http://bash.im/abyss";
-    public static final String BASH_BEST = "hhttp://bash.im/best";
+    public static final String BASH_BEST = "http://bash.im/best";
     public static final String BASH_ABBYS_TOP = "http://bash.im/abysstop";
 }

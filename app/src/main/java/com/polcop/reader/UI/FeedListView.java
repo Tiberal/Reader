@@ -97,4 +97,8 @@ public class FeedListView extends ListView {
         return loadingFooterView;
     }
 
+    public void removeLoadingFooterView() {
+        removeFooterView(getLoadingFooterView());
+    }
+
 }

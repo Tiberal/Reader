@@ -38,17 +38,43 @@ public class PageObserver {
    DatePickerFragment datePickerFragment;
 
     public void switchPage() {
-        if(PageInfo.getInstance().getCurrentPage().equals(Constants.ZADOLBALI_LINK)){
-            if(datePickerFragment==null){
-                datePickerFragment = new DatePickerFragment();
-            }
-            datePickerFragment.show(((MainActivity)context).getSupportFragmentManager(),null);
-        }else{
-            if(pageSelectionFragment==null){
-                pageSelectionFragment = new PageSelectionFragment();
-            }
-            pageSelectionFragment.show(((MainActivity)context).getSupportFragmentManager(),null);
+        switch (Utils.getLoaderId()){
+            case Constants.ZADOLBALI_LOADER:
+                if(PageInfo.getInstance().getCurrentPage().equals(Constants.ZADOLBALI_LINK)){
+                    selectPageByDate();
+                }else{
+                    selectPageByNumber();
+                }
+                break;
+            case Constants.IT_HAPPENS_LOADER:
+                selectPageByNumber();
+                break;
+            case Constants.BASH_LOADER:
+                if(PageInfo.getInstance().getCurrentPage().equals(Constants.BASH_ABYSS_BEST)){
+                    selectPageByDate();
+                }else{
+                      selectPageByNumber();
+                 }
+                 break;
+            case Constants.KILL_ME_PLZ_LOADER:
+
+                break;
         }
+
+    }
+
+    private void selectPageByNumber(){
+        if(pageSelectionFragment==null){
+            pageSelectionFragment = new PageSelectionFragment();
+        }
+        pageSelectionFragment.show(((MainActivity)context).getSupportFragmentManager(),null);
+    }
+
+    private void selectPageByDate(){
+        if(datePickerFragment==null){
+            datePickerFragment = new DatePickerFragment();
+        }
+        datePickerFragment.show(((MainActivity)context).getSupportFragmentManager(),null);
     }
 
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
@@ -65,12 +91,13 @@ public class PageObserver {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
                 dialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
                 dialog.getDatePicker().setMinDate(Constants.ZADDOLBALI_FIRST_STORY_DATE);
-            }return dialog;
+            }
+            setCancelable(false);
+            return dialog;
         }
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            String s = PageInfo.getInstance().getMaxPageNumber();
             if(twiceCalledMark){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
                     loadNewPage(createDateForLink(year, monthOfYear, dayOfMonth));
@@ -98,7 +125,12 @@ public class PageObserver {
             Bundle arg = new Bundle();
             Utils.clearBackStack();
             PageInfo.getInstance().setStoryInfos(null);
-            arg.putString(Constants.LINK, Constants.ZADOLBALI_LINK + "/" + newDate);
+            if(Utils.getLoaderId()==Constants.ZADOLBALI_LOADER){
+                arg.putString(Constants.LINK, Constants.ZADOLBALI_LINK + "/" + newDate);
+            }
+            if(Utils.getLoaderId()==Constants.BASH_LOADER){
+                arg.putString(Constants.LINK, Constants.BASH_ABYSS_BEST + "/" + newDate);
+            }
             arg.putInt(Constants.LOADER_ID, Utils.getLoaderId());
             feed.setArguments(arg);
             getActivity().getSupportFragmentManager().beginTransaction()
@@ -107,6 +139,7 @@ public class PageObserver {
         }
 
         private boolean isCorrectDate (int year, int monthOfYear, int dayOfMonth){
+            //todo проверку для баша, что прошло не больше года
             if(2009 > year){
                 return false;
             }else
@@ -192,14 +225,21 @@ public class PageObserver {
             switch (Utils.getLoaderId()){
                 case Constants.ZADOLBALI_LOADER:
                     arg.putString(Constants.LINK, PageInfo.getInstance().getCurrentPage() + "/" + newPage);
-                break;
+                    break;
                 case Constants.IT_HAPPENS_LOADER:
                     if (Constants.IT_HAPPENS_LINK.equals(PageInfo.getInstance().getCurrentPage())){
                         arg.putString(Constants.LINK, Constants.IT_HAPPENS_PAGE + newPage);
                     }else{
                         arg.putString(Constants.LINK, PageInfo.getInstance().getCurrentPage() + "/" + newPage);
                     }
-                break;
+                    break;
+                case Constants.BASH_LOADER:
+                    if(Constants.BASH_LINK.equals(PageInfo.getInstance().getCurrentPage())){
+                        arg.putString(Constants.LINK, Constants.BASH_LINK + "/" + newPage);
+                    }else{
+                        arg.putString(Constants.LINK, Constants.BASH_BY_RATING + "/" + newPage);
+                    }
+                    break;
             }
             arg.putInt(Constants.LOADER_ID,Utils.getLoaderId());
             feed.setArguments(arg);

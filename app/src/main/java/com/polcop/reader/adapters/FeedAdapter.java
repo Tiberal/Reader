@@ -16,6 +16,7 @@ import com.polcop.reader.PageInfo;
 import com.polcop.reader.UI.MovementCheck;
 import com.polcop.reader.R;
 import com.polcop.reader.StoryInfo;
+import com.polcop.reader.Utils;
 
 import org.jsoup.Jsoup;
 import java.io.IOException;
@@ -137,49 +138,126 @@ public class FeedAdapter extends BaseAdapter {
     }
 
     private void setRate(ViewHolder viewHolder, int position) {
-        //todo!!!!
-//        if(clickInfos.size()!=storyInfos.size()){
-//            updateClickInfos();
-//        }
-        viewHolder.ibBad.setVisibility(View.INVISIBLE);
-        viewHolder.ibGood.setVisibility(View.VISIBLE);
-        if(storyInfos.get(position).getGoodURL().equals("")){
-            viewHolder.ibGood.setVisibility(View.INVISIBLE);
-            return;
+        switch (Utils.getLoaderId()){
+            case Constants.IT_HAPPENS_LOADER:
+            case Constants.ZADOLBALI_LOADER:
+                viewHolder.ibBad.setVisibility(View.INVISIBLE);
+                viewHolder.ibGood.setVisibility(View.VISIBLE);
+                if(storyInfos.get(position).getGoodURL().equals("")){
+                    viewHolder.ibGood.setVisibility(View.INVISIBLE);
+                    return;
+                }
+                if(clickInfos.get(position).isGoodClicked)
+                    goodClick(viewHolder,position);
+                break;
+            case Constants.BASH_LOADER:
+                if (PageInfo.getInstance().getCurrentPage().equals(Constants.BASH_ABYSS_TOP)){
+                    //топ 25 всех историй
+                    viewHolder.ibGood.setVisibility(View.INVISIBLE);
+                    viewHolder.ibBad.setVisibility(View.INVISIBLE);
+                    viewHolder.tvRate.setText(PageInfo.getInstance().getStoryInfos().get(position).getStoryNumber());
+                }
+                if (PageInfo.getInstance().getCurrentPage().equals(Constants.BASH_ABYSS_BEST)){
+                    //в этих вкладках нет рейтинга
+                    viewHolder.ibGood.setVisibility(View.INVISIBLE);
+                    viewHolder.ibBad.setVisibility(View.INVISIBLE);
+                    viewHolder.tvRate.setText("( ･_･)");
+                }else {
+                    if (clickInfos.get(position).isGoodClicked == true ||
+                            clickInfos.get(position).isBadClicked == true) {
+                        viewHolder.ibBad.setVisibility(View.INVISIBLE);
+                        viewHolder.ibGood.setVisibility(View.INVISIBLE);
+                        if (storyInfos.get(position).getRate().equals("???") || storyInfos.get(position).getRate().equals("...")) {
+                            viewHolder.tvRate.setText("( ಠ_ಠ)");
+                        } else {
+                            int rateAfterClick = Integer.parseInt(storyInfos.get(position).getRate());
+                            if (clickInfos.get(position).isGoodClicked) {
+                                viewHolder.tvRate.setText(String.valueOf(rateAfterClick + 1));
+                            } else {
+                                viewHolder.tvRate.setText(String.valueOf(rateAfterClick - 1));
+                            }
+                        }
+                    }
+                }
+                break;
+            case Constants.KILL_ME_PLZ_LOADER:
+
+                break;
         }
-        if(clickInfos.get(position).isGoodClicked)
-            goodClick(viewHolder,position);
+
     }
 
     private void createClickListener(final ViewHolder viewHolder, final int position){
         this.listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.ibGood:
-                        goodClick(viewHolder,position);
-                        if(!(storyInfos.get(position).getGoodURL().equals(""))){
-                            postData(Constants.IT_HAPPENS_LINK+storyInfos.get(position).getGoodURL());
-                    }
+                switch (Utils.getLoaderId()){
+                    case Constants.IT_HAPPENS_LOADER:
+                        switch (v.getId()){
+                            case R.id.ibGood:
+                                goodClick(viewHolder, position);
+                                if(!(storyInfos.get(position).getGoodURL().equals(""))){
+                                    postData(Constants.IT_HAPPENS_LINK+storyInfos.get(position).getGoodURL());
+                                }
+                        }
+                        break;
+                    case Constants.ZADOLBALI_LOADER:
+                        switch (v.getId()){
+                            case R.id.ibGood:
+                                goodClick(viewHolder, position);
+                                if(!(storyInfos.get(position).getGoodURL().equals(""))){
+                                    postData(Constants.ZADOLBALI_LINK+storyInfos.get(position).getGoodURL());
+                                }
+                        }
+                        break;
+                    case Constants.BASH_LOADER:
+                        viewHolder.ibBad.setVisibility(View.INVISIBLE);
+                        viewHolder.ibGood.setVisibility(View.INVISIBLE);
+                        switch (v.getId()){
+                            case R.id.ibBad:
+                                badClick(viewHolder,position);
+                                postData(storyInfos.get(position).getBadURL());
+                                break;
+                            case R.id.ibGood:
+                                goodClick(viewHolder,position);
+                                postData(storyInfos.get(position).getGoodURL());
+                                break;
+                        }
+                        Toast.makeText(context,"Ваш голос учтен", Toast.LENGTH_SHORT).show();
+                        break;
+                    case Constants.KILL_ME_PLZ_LOADER:
+
+                        break;
                 }
+
             }
         };
     }
 
     private void goodClick(ViewHolder viewHolder, int position) {
         clickInfos.get(position).isGoodClicked=true;
-        int rate = Integer.parseInt(storyInfos.get(position).getRate());
-        rate++;
-        viewHolder.tvRate.setText(""+rate);
-        viewHolder.ibGood.setVisibility(View.INVISIBLE);
+        //проверка для башорга
+        if(storyInfos.get(position).getRate().equals("???")||storyInfos.get(position).getRate().equals("..."))
+            viewHolder.tvRate.setText("( ಠ_ಠ)");
+        else{
+            int rate = Integer.parseInt(storyInfos.get(position).getRate());
+            rate++;
+            viewHolder.tvRate.setText(""+rate);
+            viewHolder.ibGood.setVisibility(View.INVISIBLE);
+            }
     }
 
     private void badClick(ViewHolder viewHolder, int position) {
-        clickInfos.get(position).isBadClicked=true;
-        int rate = Integer.parseInt(storyInfos.get(position).getRate());
-        rate--;
-        viewHolder.tvRate.setText(""+rate);
-        viewHolder.ibBad.setVisibility(View.INVISIBLE);
+        clickInfos.get(position).isBadClicked = true;
+        //проверка для башорга
+        if(storyInfos.get(position).getRate().equals("???")||storyInfos.get(position).getRate().equals("..."))
+            viewHolder.tvRate.setText("( ಠ_ಠ)");
+        else {
+            int rate = Integer.parseInt(storyInfos.get(position).getRate());
+            rate--;
+            viewHolder.tvRate.setText("" + rate);
+            viewHolder.ibBad.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void postData(final String link){
@@ -189,7 +267,6 @@ public class FeedAdapter extends BaseAdapter {
                 try {
                     Jsoup.connect(link).get();
                 } catch (IOException e) {
-                    Toast.makeText(PageInfo.getInstance().getContext(),"косяк",Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }

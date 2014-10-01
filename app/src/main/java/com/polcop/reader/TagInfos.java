@@ -36,7 +36,7 @@ public class TagInfos implements List<TagInfo> {
 
     public String getLinkByName(String name){
         for (TagInfo tagInfo:tagInfos){
-            if (tagInfo.getTagName()==name){
+            if (tagInfo.getTagTitle()==name){
                 return tagInfo.getTagURL();
             }
         }
@@ -46,14 +46,14 @@ public class TagInfos implements List<TagInfo> {
     public String getNameByLink(String link){
         for (TagInfo tagInfo:tagInfos){
             if (tagInfo.getTagURL()==link){
-                return tagInfo.getTagName();
+                return tagInfo.getTagTitle();
             }
         }
         return null;    }
 
     public String getHtmlLinkByName(String name){
         for (TagInfo tagInfo:tagInfos){
-            if (tagInfo.getTagName()==name){
+            if (tagInfo.getTagTitle()==name){
                 return tagInfo.getHtmlTag();
             }
         }

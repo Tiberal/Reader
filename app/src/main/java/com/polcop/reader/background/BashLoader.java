@@ -5,7 +5,6 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.text.Html;
 
 import com.polcop.reader.Constants;
-import com.polcop.reader.MainActivity;
 import com.polcop.reader.PageInfo;
 import com.polcop.reader.R;
 import com.polcop.reader.StoryInfo;
@@ -14,7 +13,6 @@ import com.polcop.reader.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -62,7 +60,7 @@ public class BashLoader extends AsyncTaskLoader<Boolean> {
             TagInfo.Builder tagBuilder;
             for (int i = 0; i < tag.length; i++) {
                 tagBuilder = new TagInfo.Builder();
-                tagBuilder.setTagName(tag[i]);
+                tagBuilder.setTagTitle(tag[i]);
                 tagBuilder.setTagURL(tagLink[i]);
                 tagInfos.add(tagBuilder.build());
             }

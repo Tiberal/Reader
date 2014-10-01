@@ -32,4 +32,8 @@ public class Constants {
     public static final String BASH_ABBYS = "http://bash.im/abyss";
     public static final String BASH_BEST = "http://bash.im/best";
     public static final String BASH_ABBYS_TOP = "http://bash.im/abysstop";
+    public static final String KILL_ME_PLZ_LINK = "http://killpls.me";
+    public static final String KILL_ME_PLZ_TOP = "http://killpls.me/top/";
+    public static final String KILL_ME_PLZ_RANDOM = "http://killpls.me/random/";
+    public static final String KILL_ME_PLZ_PAGE = "http://killpls.me/page/";
 }

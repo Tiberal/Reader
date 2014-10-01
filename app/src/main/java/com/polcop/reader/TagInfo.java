@@ -1,17 +1,15 @@
 package com.polcop.reader;
 
-import android.text.Spanned;
-
 /**
  * Created by oleg on 08.09.14.
  */
 public class TagInfo {
 
-    private String tagName, tagURL, htmlTag;
+    private String tagTitle, tagURL, htmlTag;
     private int total;
 
-    public TagInfo (String tagName,String tagURL, int total,String htmlTag){
-        this.tagName = tagName;
+    public TagInfo (String tagTitle,String tagURL, int total,String htmlTag){
+        this.tagTitle = tagTitle;
         this.tagURL = tagURL;
         this.total = total;
         this.htmlTag = htmlTag;
@@ -19,11 +17,11 @@ public class TagInfo {
 
     public static class Builder{
 
-        private String tagName, tagURL,htmlTag;
+        private String tagTitle, tagURL,htmlTag;
         private int total;
 
-        public void setTagName(String tagName) {
-            this.tagName = tagName;
+        public void setTagTitle(String tagTitle) {
+            this.tagTitle = tagTitle;
         }
 
         public void setTagURL(String tagURL) {
@@ -38,12 +36,12 @@ public class TagInfo {
             this.htmlTag = htmlTag;
         }
         public TagInfo build(){
-            return  new TagInfo(tagName, tagURL, total, htmlTag);
+            return  new TagInfo(tagTitle, tagURL, total, htmlTag);
         }
     }
 
-    public String getTagName() {
-        return tagName;
+    public String getTagTitle() {
+        return tagTitle;
     }
 
     public String getTagURL() {

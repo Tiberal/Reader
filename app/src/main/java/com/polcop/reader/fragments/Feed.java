@@ -92,6 +92,18 @@ public class Feed extends Fragment {
                             listView.removeLoadingFooterView();
                             return;
                         }
+                        break;
+                    case  Constants.KILL_ME_PLZ_LOADER:
+                        if(PageInfo.getInstance().getCurrentPage().equals(Constants.KILL_ME_PLZ_TOP)||
+                                PageInfo.getInstance().getCurrentPage().equals(Constants.KILL_ME_PLZ_RANDOM)){
+                            listView.removeLoadingFooterView();
+                            return;
+                        }
+                        if(PageInfo.getInstance().getCurrentPage().equals(Constants.KILL_ME_PLZ_LINK))
+                            loadLink = Constants.KILL_ME_PLZ_PAGE+PageInfo.getInstance().getPreviousPage();
+                        else
+                            loadLink = PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage();
+                        break;
                 }
 
                 if(!Utils.isOnline()){

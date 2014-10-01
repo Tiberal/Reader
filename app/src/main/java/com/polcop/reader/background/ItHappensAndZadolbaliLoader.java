@@ -72,7 +72,7 @@ public class ItHappensAndZadolbaliLoader extends AsyncTaskLoader<Boolean> implem
             for (Element element : elements) {
                 Element element1 = element.child(0);
                 tagBuilder.setHtmlTag(element1.outerHtml());
-                tagBuilder.setTagName(element.text());
+                tagBuilder.setTagTitle(element.text());
                 if (loaderId == Constants.IT_HAPPENS_LOADER) {
                     tagBuilder.setTagURL(Constants.IT_HAPPENS_LINK + element.child(0).attr("href"));
                 } else {

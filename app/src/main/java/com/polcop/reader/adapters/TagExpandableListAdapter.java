@@ -87,10 +87,14 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
                 data.put(group[0], child);
             break;
             case Constants.KILL_ME_PLZ_LOADER:
+                for (int i = 0; i < killMePlzMainItems.length; i++) {
+                    child.add(killMePlzMainItems[i]);
+                }
+                data.put(group[0], child);
                 break;
             case Constants.BASH_LOADER:
                 for (int i = 0; i < tagInfos.size(); i++) {
-                    child.add(tagInfos.get(i).getTagName());
+                    child.add(tagInfos.get(i).getTagTitle());
                 }
                 data.put(group[0], child);
                 return data;
@@ -99,7 +103,7 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
 
         child = new ArrayList<String>();
         for (int i = 0; i < tagInfos.size(); i++) {
-            child.add(tagInfos.get(i).getTagName());
+            child.add(tagInfos.get(i).getTagTitle());
             }
         data.put(group[1],child);
         return data;

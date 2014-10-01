@@ -137,7 +137,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     public void anotherContent(ArrayList<TagInfo> tagInfos){
         ArrayList<String> temp = new ArrayList<String>();
         for (int i=0;i<tagInfos.size();i++){
-            temp.add(tagInfos.get(i).getTagName());
+            temp.add(tagInfos.get(i).getTagTitle());
         }
         TagExpandableListAdapter adapter = new TagExpandableListAdapter(tagInfos,this);
         drawerLayout.closeDrawers();
@@ -170,7 +170,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                 break;
             case 3:
                 Toast.makeText(this,"KillMePlz",Toast.LENGTH_SHORT).show();
-                //switchContent(Constants.KILL_ME_PLZ_LINK, Constants.KILL_ME_PLZ_LOADER);
+                PageInfo.getInstance().setCurrentPage(Constants.KILL_ME_PLZ_LINK);
+                showCurrentPageInActionBar("Новые");
+                switchContent(Constants.KILL_ME_PLZ_LINK, Constants.KILL_ME_PLZ_LOADER);
                 break;
         }
         return true;
@@ -199,7 +201,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                     bashClick(childPosition);
                     break;
                 case Constants.KILL_ME_PLZ_LOADER:
-                    //killMePlzClick(groupPosition,childPosition);
+                    killMePlzClick(groupPosition,childPosition);
                     break;
             }
             return true;
@@ -248,7 +250,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         }else if (groupPosition==1){
             ArrayList<TagInfo> tagInfos = PageInfo.getInstance().getTagInfos();
             PageInfo.getInstance().setCurrentPage(tagInfos.get(childPosition).getTagURL());
-            showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagName());
+            showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagTitle());
             setCurrentPageInActionBarClickable(true);
             switchContent(tagInfos.get(childPosition).getTagURL(), loaderId);
         }
@@ -261,9 +263,41 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             setCurrentPageInActionBarClickable(false);
         }
         PageInfo.getInstance().setCurrentPage(PageInfo.getInstance().getTagInfos().get(childPosition).getTagURL());
-        showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagName());
+        showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagTitle());
         switchContent(PageInfo.getInstance().getTagInfos().get(childPosition).getTagURL(),Constants.BASH_LOADER);
 
+    }
+
+    private void killMePlzClick(int groupPosition, int childPosition){
+        if(childPosition==0){
+            setCurrentPageInActionBarClickable(true);
+        }else{
+            setCurrentPageInActionBarClickable(false);
+        }
+        if (groupPosition==0){
+            switch (childPosition){
+                case 0:
+                    PageInfo.getInstance().setCurrentPage(Constants.KILL_ME_PLZ_LINK);
+                    showCurrentPageInActionBar("Новые");
+                    switchContent(PageInfo.getInstance().getCurrentPage(), Constants.KILL_ME_PLZ_LOADER);
+                    break;
+                case 1:
+                    PageInfo.getInstance().setCurrentPage(Constants.KILL_ME_PLZ_TOP);
+                    showCurrentPageInActionBar("Самые страшные");
+                    switchContent(PageInfo.getInstance().getCurrentPage(), Constants.KILL_ME_PLZ_LOADER);
+                    break;
+                case 2:
+                    PageInfo.getInstance().setCurrentPage(Constants.KILL_ME_PLZ_RANDOM);
+                    showCurrentPageInActionBar("Случайная");
+                    switchContent(PageInfo.getInstance().getCurrentPage(), Constants.KILL_ME_PLZ_LOADER);
+                    break;
+            }
+        }else if (groupPosition==1){
+            ArrayList<TagInfo> tagInfos = PageInfo.getInstance().getTagInfos();
+            PageInfo.getInstance().setCurrentPage(Constants.KILL_ME_PLZ_LINK + tagInfos.get(childPosition).getTagURL());
+            showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagTitle());
+            switchContent(Constants.KILL_ME_PLZ_LINK + tagInfos.get(childPosition).getTagURL(), Constants.KILL_ME_PLZ_LOADER);
+        }
     }
 
     private void switchContent(String link, int id){

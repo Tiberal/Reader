@@ -113,7 +113,7 @@ public class MovementCheck  extends LinkMovementMethod {
         ArrayList<TagInfo> tagInfos = PageInfo.getInstance().getTagInfos();
         for (TagInfo tagInfo: tagInfos){
             if(tagInfo.getTagURL().equals(link))
-                return tagInfo.getTagName();
+                return tagInfo.getTagTitle();
         }
         return null;
     }

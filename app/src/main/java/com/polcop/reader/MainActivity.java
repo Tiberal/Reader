@@ -150,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     public boolean onNavigationItemSelected(int position, long id) {
         setCurrentPageInActionBarClickable(true);
         switch (position){
-            case 0:
+            case 3:
                 Toast.makeText(this,"ItHappens",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
                 showCurrentPageInActionBar("Свежие");
@@ -168,7 +168,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                 showCurrentPageInActionBar("Новые");
                 switchContent(Constants.BASH_LINK, Constants.BASH_LOADER);
                 break;
-            case 3:
+            case 0:
                 Toast.makeText(this,"KillMePlz",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.KILL_ME_PLZ_LINK);
                 showCurrentPageInActionBar("Новые");
@@ -296,6 +296,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             ArrayList<TagInfo> tagInfos = PageInfo.getInstance().getTagInfos();
             PageInfo.getInstance().setCurrentPage(Constants.KILL_ME_PLZ_LINK + tagInfos.get(childPosition).getTagURL());
             showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagTitle());
+            setCurrentPageInActionBarClickable(true);
             switchContent(Constants.KILL_ME_PLZ_LINK + tagInfos.get(childPosition).getTagURL(), Constants.KILL_ME_PLZ_LOADER);
         }
     }

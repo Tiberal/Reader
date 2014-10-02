@@ -76,6 +76,9 @@ public class MovementCheck  extends LinkMovementMethod {
                         return true;
                     }
                     break;
+                case Constants.KILL_ME_PLZ_LOADER:
+                    loadTagData(Constants.KILL_ME_PLZ_LINK,link);
+                    return true;
             }
 
         }
@@ -99,6 +102,7 @@ public class MovementCheck  extends LinkMovementMethod {
 
     private void loadTagData(String linkPart1, String linkPart2){
         Utils.clearBackStack();
+        PageInfo.getInstance().clearStoryInfo();
         PageInfo.getInstance().setCurrentPage(linkPart1+linkPart2);
         Feed feed = new Feed();
         Bundle arg = new Bundle();
@@ -106,7 +110,11 @@ public class MovementCheck  extends LinkMovementMethod {
         arg.putInt(Constants.ID_KEY, Utils.getLoaderId());
         feed.setArguments(arg);
         ((MainActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container,feed,null).commit();
-        ((MainActivity) context).showCurrentPageInActionBar(getTagNameByLink(linkPart1 + linkPart2));
+        if(Utils.getLoaderId()==Constants.KILL_ME_PLZ_LOADER){
+            ((MainActivity) context).showCurrentPageInActionBar(getTagNameByLink(linkPart2));
+        }else {
+            ((MainActivity) context).showCurrentPageInActionBar(getTagNameByLink(linkPart1 + linkPart2));
+        }
     }
 
     private String getTagNameByLink(String link){

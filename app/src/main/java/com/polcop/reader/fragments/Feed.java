@@ -112,6 +112,7 @@ public class Feed extends Fragment {
                     listView.getLoadingFooterView().setVisibleReloadButton();
                     return;
                 }
+                //достигнута первая страница
                 if(PageInfo.getInstance().getPreviousPage()==null) return;
                 Toast.makeText(getActivity(),loadLink,Toast.LENGTH_LONG).show();
                 loadData(loadLink,Utils.getLoaderId());

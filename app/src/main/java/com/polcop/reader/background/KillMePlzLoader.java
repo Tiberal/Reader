@@ -51,17 +51,22 @@ public class KillMePlzLoader extends AsyncTaskLoader<Boolean> {
         int loaderId = Utils.getLoaderId();
         try {
             Document document = Jsoup.connect(link).timeout(10000).get();
-            Elements allTags = document.select(".tag");
-            TagInfo.Builder tagBuilder = new TagInfo.Builder();
-            for(Element element:allTags){
-                String total = element.select("span").text();
-                total = total.substring(1,total.length()-1);
-                tagBuilder.setTotal(Integer.parseInt(total));
-                tagBuilder.setTagURL(element.child(0).child(0).attr("href"));
-                String title = element.child(0).child(0).text();
-                tagBuilder.setTagTitle(title);
-                tagBuilder.setHtmlTag("<a href=\"" + link +"\">"+ title +"</a>");
-                tagInfos.add(tagBuilder.build());
+            if (link.equals(Constants.KILL_ME_PLZ_LINK)){
+                //парсим теги только во время загрузки главной страницы
+                Elements allTags = document.select(".tag");
+                TagInfo.Builder tagBuilder = new TagInfo.Builder();
+                for(Element element:allTags){
+                    String total = element.select("span").text();
+                    total = total.substring(1,total.length()-1);
+                    tagBuilder.setTotal(Integer.parseInt(total));
+                    Element s = element.children().get(0);
+                    tagBuilder.setTagURL(element.child(0).child(0).attr("href"));
+                    String title = element.child(0).child(0).text();
+                    tagBuilder.setTagTitle(title);
+                    tagBuilder.setHtmlTag("<a href=\"" + link +"\">"+ title +"</a>");
+                    tagInfos.add(tagBuilder.build());
+                    PageInfo.getInstance().setTagInfos(tagInfos);
+                }
             }
             Elements tags = document.select(".fi_tags");
             Elements pubid = document.select(".fi_pubid");
@@ -103,7 +108,6 @@ public class KillMePlzLoader extends AsyncTaskLoader<Boolean> {
         } else {
             PageInfo.getInstance().addStoryInfos(storyInfos);
         }
-        PageInfo.getInstance().setTagInfos(tagInfos);
         return true;
        }
 
@@ -113,7 +117,13 @@ public class KillMePlzLoader extends AsyncTaskLoader<Boolean> {
         for(int i = 0; i < elements.size(); i++){
             int s1 = elements.get(i).children().size();
             if(s1==0){
-                PageInfo.getInstance().setPreviousPage(elements.get(i+1).children().get(0).text());
+                    String s = elements.get(i).text();
+                    if(s.equals("1")){
+                        PageInfo.getInstance().setPreviousPage(null);
+                    }else{
+                        PageInfo.getInstance().setPreviousPage(elements.get(i+1).children().get(0).text());
+                        return;
+                    }
             }
         }
     }
@@ -132,9 +142,10 @@ public class KillMePlzLoader extends AsyncTaskLoader<Boolean> {
     }
 
     private String[] getHtmlLinkArray(Elements elements) {
+        if(elements.size()==0) return null;
         ArrayList<String> list = new ArrayList<String>();
         for (Element e : elements) {
-            list.add(e.html());
+            list.add(e.outerHtml());
         }
         return list.toArray(new String[]{});
     }

@@ -102,7 +102,6 @@ public class MovementCheck  extends LinkMovementMethod {
 
     private void loadTagData(String linkPart1, String linkPart2){
         Utils.clearBackStack();
-        PageInfo.getInstance().clearStoryInfo();
         PageInfo.getInstance().setCurrentPage(linkPart1+linkPart2);
         Feed feed = new Feed();
         Bundle arg = new Bundle();

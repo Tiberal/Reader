@@ -47,8 +47,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         DrawerItemClickListener drawerItemClickListener = new DrawerItemClickListener(this);
         drawerExpandableListView.setOnChildClickListener(drawerItemClickListener);
         drawerExpandableListView.setOnGroupClickListener(drawerItemClickListener);
-        drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.drawable.ic_drawer,
-                R.string.drawer_open,R.string.drawer_close) {
+        drawerToggle = new ActionBarDrawerToggle(this,drawerLayout, R.drawable.ic_drawer,
+                R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         tvCurrentPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"action",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"action",Toast.LENGTH_SHORT).show();
                 if(pageObserver==null){
                     pageObserver=new PageObserver();
                 }
@@ -101,7 +101,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         actionBar.setListNavigationCallbacks(adapter, this);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-   }
+    }
 
     public void showCurrentPageInActionBar(String s){
         tvCurrentPage.setText(s);
@@ -151,25 +151,25 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         setCurrentPageInActionBarClickable(true);
         switch (position){
             case 0:
-                Toast.makeText(this,"ItHappens",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"ItHappens",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
                 showCurrentPageInActionBar("Свежие");
                 switchContent(Constants.IT_HAPPENS_LINK, Constants.IT_HAPPENS_LOADER);
                 break;
             case 1:
-                Toast.makeText(this,"Задолба!ли",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"Задолба!ли",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
                 showCurrentPageInActionBar("Свежие");
                 switchContent(Constants.ZADOLBALI_LINK, Constants.ZADOLBALI_LOADER);
                 break;
             case 2:
-                Toast.makeText(this,"Bash",Toast.LENGTH_SHORT).show();PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
+                //Toast.makeText(this,"Bash",Toast.LENGTH_SHORT).show();PageInfo.getInstance().setCurrentPage(Constants.ZADOLBALI_LINK);
                 PageInfo.getInstance().setCurrentPage(Constants.BASH_LINK);
                 showCurrentPageInActionBar("Новые");
                 switchContent(Constants.BASH_LINK, Constants.BASH_LOADER);
                 break;
             case 3:
-                Toast.makeText(this,"KillMePlz",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"KillMePlz",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.KILL_ME_PLZ_LINK);
                 showCurrentPageInActionBar("Новые");
                 switchContent(Constants.KILL_ME_PLZ_LINK, Constants.KILL_ME_PLZ_LOADER);
@@ -302,23 +302,23 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     }
 
     private void switchContent(String link, int id){
-       drawerLayout.closeDrawers();
-       PageInfo.getInstance().clearStoryInfo();
-       if (feed!=null){
+        drawerLayout.closeDrawers();
+        PageInfo.getInstance().clearStoryInfo();
+        if (feed!=null){
             getSupportFragmentManager().beginTransaction().remove(feed);
         }
         Bundle arg = new Bundle();
         arg.putString(Constants.LINK, link);
         arg.putInt(Constants.LOADER_ID,id);
-       if(Utils.isOnline()){
+        if(Utils.isOnline()){
             feed = new Feed();
             feed.setArguments(arg);
             Utils.setLoaderId(id);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, feed, Constants.FEED_TAG)
                     .commit();
-       }else{
-           Utils.showNoConnectionFragment(arg,this);
-       }
+        }else{
+            Utils.showNoConnectionFragment(arg,this);
+        }
     }
 }

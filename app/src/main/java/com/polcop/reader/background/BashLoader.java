@@ -38,7 +38,7 @@ public class BashLoader extends AsyncTaskLoader<Boolean> {
 
     @Override
     protected void onStartLoading() {
-        if(maxPage==null&&perviousPage==null){
+        if (maxPage == null && perviousPage == null) {
             forceLoad();
         }
     }
@@ -90,13 +90,13 @@ public class BashLoader extends AsyncTaskLoader<Boolean> {
                 storyBuilder.setBadURL(badURL.size() != 0 ? "http://bash.im" + badURL.get(i).attr("href") : "");
                 storyInfos.add(storyBuilder.build());
             }
-            if(!noPagination()){
+            if (!noPagination()) {
                 setMaxPage(document);
                 setPerviousPage(document);
             }
 
         } catch (IOException e) {
-        //todo no connect frag
+            //todo no connect frag
             e.printStackTrace();
         }
         if (PageInfo.getInstance().getStoryInfos() == null) {
@@ -109,28 +109,38 @@ public class BashLoader extends AsyncTaskLoader<Boolean> {
     }
 
     private void setPerviousPage(Document document) {
-        if(link.contains(Constants.BASH_ABYSS_BEST)){
+        if (link.contains(Constants.BASH_ABYSS_BEST)) {
             String currentPage = document.select(".pager").select("input").attr("data-date");
-            PageInfo.getInstance().setPreviousPage(getPerviousDate(currentPage));
+            perviousPage = getPerviousDate(currentPage);
+            PageInfo.getInstance().setPreviousPage(perviousPage);
             return;
         }
         String currentPage = document.select(".pager").select("input").attr("value");
         int page = Integer.parseInt(currentPage);
-        if(link.contains(Constants.BASH_LINK)){
-            if ((page-1)==0) PageInfo.getInstance().setPreviousPage(null);
-            else PageInfo.getInstance().setPreviousPage(String.valueOf(page-1));
+        if (link.contains(Constants.BASH_LINK)) {
+            if ((page - 1) == 0) {
+                perviousPage = null;
+                PageInfo.getInstance().setPreviousPage(perviousPage);
+            } else {
+                perviousPage = String.valueOf(page - 1);
+                PageInfo.getInstance().setPreviousPage(perviousPage);
+            }
             return;
         }
-        if(link.contains(Constants.BASH_BY_RATING)){
-            if ((page+1)>Integer.parseInt(PageInfo.getInstance().getMaxPageNumber()))
-                PageInfo.getInstance().setPreviousPage(null);
-            else PageInfo.getInstance().setPreviousPage(String.valueOf(page+1));
+        if (link.contains(Constants.BASH_BY_RATING)) {
+            if ((page + 1) > Integer.parseInt(PageInfo.getInstance().getMaxPageNumber())) {
+                perviousPage = null;
+                PageInfo.getInstance().setPreviousPage(perviousPage);
+            } else {
+                perviousPage = String.valueOf(page + 1);
+                PageInfo.getInstance().setPreviousPage(perviousPage);
+            }
         }
 
     }
 
     private String getPerviousDate(String currentPage) {
-        currentPage = currentPage.substring(0,4) + "/" + currentPage.substring(4,6) + "/" + currentPage.substring(6);
+        currentPage = currentPage.substring(0, 4) + "/" + currentPage.substring(4, 6) + "/" + currentPage.substring(6);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date date = null;
         try {
@@ -144,20 +154,19 @@ public class BashLoader extends AsyncTaskLoader<Boolean> {
         cal.add(Calendar.DATE, -1);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String perviousDay = simpleDateFormat.format(cal.getTime());
-        return perviousDay.substring(0,4)+perviousDay.substring(5,7)+ perviousDay.substring(8);
+        return perviousDay.substring(0, 4) + perviousDay.substring(5, 7) + perviousDay.substring(8);
     }
 
     private void setMaxPage(Document document) {
-        String maxPage = document.select(".pager").select("input").attr("max");
+        maxPage = document.select(".pager").select("input").attr("max");
         PageInfo.getInstance().setMaxPageNumber(maxPage);
     }
 
-    private boolean noPagination(){
+    private boolean noPagination() {
         if (link.equals(Constants.BASH_RANDOM)) return true;
         if (link.equals(Constants.BASH_BEST)) return true;
         if (link.equals(Constants.BASH_ABBYS)) return true;
         if (link.equals(Constants.BASH_ABBYS_TOP)) return true;
         return false;
     }
-
 }

@@ -29,6 +29,9 @@ public class Utils {
         if(link.equals(Constants.ZADOLBALI_LINK)) return true;
         if(link.equals(Constants.ZADOLBALI_BEST)) return true;
         if(link.equals(Constants.ZADOLBALI_RANDOM)) return true;
+        if (link.equals(Constants.KILL_ME_PLZ_LINK)) return true;
+        if(link.equals(Constants.KILL_ME_PLZ_RANDOM)) return true;
+        if(link.equals(Constants.KILL_ME_PLZ_TOP)) return true;
         return false;
     }
 

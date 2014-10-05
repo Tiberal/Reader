@@ -57,22 +57,22 @@ public class MovementCheck  extends LinkMovementMethod {
                 case Constants.IT_HAPPENS_LOADER:
                     if(Utils.isMainLink(Constants.IT_HAPPENS_LINK+link,PageInfo.getInstance().getTagInfos())){
                         loadTagData(Constants.IT_HAPPENS_LINK,link);
-                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
                         return true;
                     }
                     if(openStoryLink(Constants.IT_HAPPENS_LINK,link)){
-                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
                         return true;
                     }
                     break;
                 case Constants.ZADOLBALI_LOADER:
                     if(Utils.isMainLink(Constants.ZADOLBALI_LINK+link,PageInfo.getInstance().getTagInfos())){
                         loadTagData(Constants.ZADOLBALI_LINK,link);
-                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
                         return true;
                     }
                     if(openStoryLink(Constants.ZADOLBALI_LINK,link)){
-                        Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "link " + link, Toast.LENGTH_LONG).show();
                         return true;
                     }
                     break;

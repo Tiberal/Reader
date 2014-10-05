@@ -48,7 +48,6 @@ public class KillMePlzLoader extends AsyncTaskLoader<Boolean> {
     public Boolean loadInBackground() {
         ArrayList<StoryInfo> storyInfos = new ArrayList<StoryInfo>();
         ArrayList<TagInfo> tagInfos = new ArrayList<TagInfo>();
-        int loaderId = Utils.getLoaderId();
         try {
             Document document = Jsoup.connect(link).timeout(10000).get();
             if (link.equals(Constants.KILL_ME_PLZ_LINK)){
@@ -59,7 +58,6 @@ public class KillMePlzLoader extends AsyncTaskLoader<Boolean> {
                     String total = element.select("span").text();
                     total = total.substring(1,total.length()-1);
                     tagBuilder.setTotal(Integer.parseInt(total));
-                    Element s = element.children().get(0);
                     tagBuilder.setTagURL(element.child(0).child(0).attr("href"));
                     String title = element.child(0).child(0).text();
                     tagBuilder.setTagTitle(title);
@@ -96,6 +94,11 @@ public class KillMePlzLoader extends AsyncTaskLoader<Boolean> {
                 storyBuilder.setStoryTitle("");
                 storyInfos.add(storyBuilder.build());
             }
+            //если переход по тегу был с одиночной истории нужно обнулить storyInfo
+            if (Utils.isMainLink(link.substring(17), PageInfo.getInstance().getTagInfos())) {
+                PageInfo.getInstance().clearStoryInfo();
+            }
+            //В "Случайной" и "Самоых страшных" нет пагинации
             if(!(link.contains("top")||link.contains("random")))
                 setPerviousPageAndMaxPage(document);
         } catch (IOException e) {
@@ -109,21 +112,24 @@ public class KillMePlzLoader extends AsyncTaskLoader<Boolean> {
             PageInfo.getInstance().addStoryInfos(storyInfos);
         }
         return true;
-       }
+    }
 
     private void setPerviousPageAndMaxPage(Document document){
         Elements elements = document.select("span.pagina");
-        PageInfo.getInstance().setMaxPageNumber(elements.get(0).text());
+        maxPage=elements.get(0).text();
+        PageInfo.getInstance().setMaxPageNumber(maxPage);
         for(int i = 0; i < elements.size(); i++){
             int s1 = elements.get(i).children().size();
             if(s1==0){
-                    String s = elements.get(i).text();
-                    if(s.equals("1")){
-                        PageInfo.getInstance().setPreviousPage(null);
-                    }else{
-                        PageInfo.getInstance().setPreviousPage(elements.get(i+1).children().get(0).text());
-                        return;
-                    }
+                String s = elements.get(i).text();
+                if(s.equals("1")){
+                    perviousPage=null;
+                    PageInfo.getInstance().setPreviousPage(perviousPage);
+                }else{
+                    perviousPage=elements.get(i+1).children().get(0).text();
+                    PageInfo.getInstance().setPreviousPage(perviousPage);
+                    return;
+                }
             }
         }
     }

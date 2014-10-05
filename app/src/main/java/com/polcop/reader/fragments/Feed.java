@@ -39,9 +39,6 @@ public class Feed extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if(PageInfo.getInstance().getStoryInfos()!=null){
-//            getListView().updateFeedListView(loadersControl.getAdapter());
-//        }
         ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setVisibility(View.VISIBLE);
         ((MainActivity)getActivity()).getSupportActionBar().getCustomView().setClickable(true);
     }
@@ -66,6 +63,8 @@ public class Feed extends Fragment {
         });
         loadersControl = new LoadersControl(getActivity(),getListView());
         //todo лодер контрол сделать в единственно экземпляре
+        if(PageInfo.getInstance().getCurrentPage().equals(Constants.KILL_ME_PLZ_RANDOM))
+            listView.removeLoadingFooterView();
         listView.setPagination(new FeedListView.Pagination() {
             @Override
             public void onLoadContent() {
@@ -73,10 +72,10 @@ public class Feed extends Fragment {
                 switch (id){
                     case Constants.IT_HAPPENS_LOADER:
                         if (PageInfo.getInstance().getCurrentPage().equals(Constants.IT_HAPPENS_LINK)){
-                        loadLink = Constants.IT_HAPPENS_PAGE+PageInfo.getInstance().getPreviousPage();
-                    }else {
-                        loadLink = PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage();
-                    }
+                            loadLink = Constants.IT_HAPPENS_PAGE+PageInfo.getInstance().getPreviousPage();
+                        }else {
+                            loadLink = PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage();
+                        }
                         break;
                     case Constants.ZADOLBALI_LOADER:
                         loadLink = Constants.ZADOLBALI_LINK+PageInfo.getInstance().getPreviousPage();
@@ -114,9 +113,9 @@ public class Feed extends Fragment {
                 }
                 //достигнута первая страница
                 if(PageInfo.getInstance().getPreviousPage()==null) return;
-                Toast.makeText(getActivity(),loadLink,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(),loadLink,Toast.LENGTH_LONG).show();
                 loadData(loadLink,Utils.getLoaderId());
-                }
+            }
         });
         if(firstLoad){
             //выполняется при создании фрагмента и первой загрузке

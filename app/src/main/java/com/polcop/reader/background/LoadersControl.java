@@ -33,7 +33,7 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
     @Override
     public Loader<Boolean> onCreateLoader(int id, Bundle bundle) {
         link = bundle.getString(Constants.LINK);
-        Toast.makeText(context,"start loader",Toast.LENGTH_SHORT).show();
+        //.makeText(context,"start loader",Toast.LENGTH_SHORT).show();
         switch (Utils.getLoaderId()){
             case Constants.IT_HAPPENS_LOADER:
                 return new ItHappensAndZadolbaliLoader(context,link, Constants.IT_HAPPENS_TAG);

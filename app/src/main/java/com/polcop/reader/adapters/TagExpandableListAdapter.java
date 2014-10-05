@@ -85,7 +85,7 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
                     child.add(ZadolbaliAndItHappensItems[i]);
                 }
                 data.put(group[0], child);
-            break;
+                break;
             case Constants.KILL_ME_PLZ_LOADER:
                 for (int i = 0; i < killMePlzMainItems.length; i++) {
                     child.add(killMePlzMainItems[i]);
@@ -104,7 +104,7 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
         child = new ArrayList<String>();
         for (int i = 0; i < tagInfos.size(); i++) {
             child.add(tagInfos.get(i).getTagTitle());
-            }
+        }
         data.put(group[1],child);
         return data;
     }

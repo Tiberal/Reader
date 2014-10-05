@@ -102,3 +102,4 @@ public class SingleStoryFragment extends ListFragment{
 //        feed.getListView().setLoading(false);
     }
 }
+

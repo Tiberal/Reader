@@ -26,14 +26,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -249,13 +245,12 @@ public class FeedAdapter extends BaseAdapter {
                         switch (v.getId()) {
                             case R.id.ibBad:
                                 badClick(viewHolder, position);
-                                //vote(.getBadURL());
-                                //postRate(storyInfos.get(position));
+                                postBadRate(storyInfos.get(position));
                                 break;
                             case R.id.ibGood:
                                 goodClick(viewHolder, position);
-                                //vote(storyInfos.get(position).getGoodURL());
-                                //postRate(storyInfos.get(position));
+                                vote(storyInfos.get(position).getGoodURL());
+                                postGoodRate(storyInfos.get(position));
                                 break;
                         }
                         Toast.makeText(context, "Ваш голос учтен", Toast.LENGTH_SHORT).show();
@@ -321,86 +316,48 @@ public class FeedAdapter extends BaseAdapter {
         thread.start();
     }
 
-    /*  private void postRate (final  StoryInfo storyInfo){
-          Thread thread = new Thread(new Runnable() {
+    private void postBadRate(StoryInfo storyInfo) {
+        postRate(storyInfo, true);
+    }
+
+    private void postGoodRate(StoryInfo storyInfo) {
+        postRate(storyInfo, false);
+    }
+
+    private void postRate(final StoryInfo storyInfo, final boolean b){
+         Thread thread = new Thread(new Runnable() {
               @Override
               public void run() {
+                  String action;
+                  if(b){
+                      action = "sux";
+                  }else {
+                      action = "rulez";
+                  }
+                  String id = storyInfo.getStoryNumber().substring(1, storyInfo.getStoryNumber().length() - 1);
+                  AndroidHttpClient httpClient;
+                  httpClient = AndroidHttpClient.newInstance(System.getProperty("http.agent", "Android"), context);
+                  HttpPost httpPost = new HttpPost(String.format("http://bash.im/quote/%s/%s", id, "rulez"));
                   try {
-                      String id = storyInfo.getStoryNumber().substring(1, storyInfo.getStoryNumber().length() - 1);
-
-                      AndroidHttpClient httpClient;
-                      httpClient = AndroidHttpClient.newInstance(System.getProperty("http.agent", "Android"), context);
-                      HttpClientParams.setRedirecting(httpClient.getParams(), true);
-
-                      HttpPost post = new HttpPost(String.format("quote/%s/%s", id, "rulez"));
-                      StringPart quotePart = new StringPart("quote", id, "UTF-8");
-                      StringPart act = new StringPart("act", "rulez", "UTF-8");
-                      MultipartEntity entity = new MultipartEntity(new Part[]{act, quotePart});
-                      post.setEntity(entity);
-
-                      HttpResponse httpResponse = httpClient.execute(post);
-                      String result = readFromStream(httpResponse.getEntity().getContent());
+                      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                      httpPost.addHeader("Referer","http://bash.im");
+                      nameValuePairs.add(new BasicNameValuePair("quote", id));
+                      nameValuePairs.add(new BasicNameValuePair("act", action));
+                      httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+                      HttpResponse response = httpClient.execute(httpPost);
+                      StatusLine s = response.getStatusLine();
+                      System.out.print(s);
+                  } catch (ClientProtocolException e) {
+                      e.printStackTrace();
                   } catch (IOException e) {
                       e.printStackTrace();
+                  }finally {
+                      httpClient.close();
                   }
               }
           });
           thread.start();
       }
-  */
-    public String readFromStream(InputStream is) {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String line = reader.readLine();
-            StringBuilder sb = new StringBuilder();
-            while (line != null) {
-                sb.append(line);
-                line = reader.readLine();
-            }
-            return sb.toString();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    private void postBushRate(final StoryInfo storyInfo) {
-        // Create a new HttpClient and Post Header
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
 
-                String link = storyInfo.getStoryNumber().substring(1, storyInfo.getStoryNumber().length() - 1);
-
-                HttpClient httpClient;
-                httpClient = AndroidHttpClient.newInstance(System.getProperty("http.agent", "Android"), context);
-                HttpClientParams.setRedirecting(httpClient.getParams(), true);
-                // HttpParams params = new BasicHttpParams();
-                // params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-                // httpClient= new DefaultHttpClient(params);
-                HttpPost httpPost = new HttpPost(String.format("quote/%s/%s", link, "rulez"));
-                //httpPost.addHeader("scheme","vv");
-                //httpPost.setHeader("host", "bash.im");
-
-                try {
-
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                    nameValuePairs.add(new BasicNameValuePair("quote", link));
-                    nameValuePairs.add(new BasicNameValuePair("act", "rulez"));
-
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
-
-                    HttpResponse response = httpClient.execute(httpPost);
-
-                    StatusLine s = response.getStatusLine();
-                    storyInfo.getGoodURL();
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-
-    }
 }

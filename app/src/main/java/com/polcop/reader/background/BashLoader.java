@@ -52,7 +52,6 @@ public class BashLoader extends AsyncTaskLoader<Boolean> {
     public Boolean loadInBackground() {
         ArrayList<StoryInfo> storyInfos = new ArrayList<StoryInfo>();
         ArrayList<TagInfo> tagInfos = new ArrayList<TagInfo>();
-        int loaderId = Utils.getLoaderId();
         try {
             String[] tag = getContext().getResources().getStringArray(R.array.bash_tag);
             String[] tagLink = getContext().getResources().getStringArray(R.array.bash_link);

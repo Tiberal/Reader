@@ -43,6 +43,9 @@ public class LoadersControl implements LoaderManager.LoaderCallbacks<Boolean> {
                 return new BashLoader(context, link);
             case Constants.KILL_ME_PLZ_LOADER:
                 return new KillMePlzLoader(context,link);
+            case Constants.SHORTIKI_LOADER:
+                return new ShortikiLoader(context, link) {
+                };
         }
         return null;
     }

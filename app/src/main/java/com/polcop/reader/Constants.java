@@ -15,6 +15,7 @@ public class Constants {
     public static final int BASH_LOADER = 101;
     public static final int ZADOLBALI_LOADER = 102;
     public static final int IT_HAPPENS_LOADER = 103;
+    public static final int SHORTIKI_LOADER = 104;
     public static final String LOADER_ID = "loader_id";
     public static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
     public static final String IT_HAPPENS_PAGE = "http://ithappens.me/page/";
@@ -36,4 +37,5 @@ public class Constants {
     public static final String KILL_ME_PLZ_TOP = "http://killpls.me/top/";
     public static final String KILL_ME_PLZ_RANDOM = "http://killpls.me/random/";
     public static final String KILL_ME_PLZ_PAGE = "http://killpls.me/page/";
+    public static final String SHORTIKI_LINK = "http://shortiki.com/";
 }

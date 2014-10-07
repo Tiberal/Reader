@@ -98,7 +98,12 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
                 }
                 data.put(group[0], child);
                 return data;
-
+            case Constants.SHORTIKI_LOADER:
+                for (int i = 0; i < tagInfos.size(); i++) {
+                    child.add(tagInfos.get(i).getTagTitle());
+                }
+                data.put(group[0], child);
+                return data;
         }
 
         child = new ArrayList<String>();

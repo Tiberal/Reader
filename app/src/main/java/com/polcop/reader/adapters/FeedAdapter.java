@@ -23,7 +23,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
@@ -245,12 +244,12 @@ public class FeedAdapter extends BaseAdapter {
                         switch (v.getId()) {
                             case R.id.ibBad:
                                 badClick(viewHolder, position);
-                                postBadRate(storyInfos.get(position));
+                                postBashBadRate(storyInfos.get(position));
                                 break;
                             case R.id.ibGood:
                                 goodClick(viewHolder, position);
                                 vote(storyInfos.get(position).getGoodURL());
-                                postGoodRate(storyInfos.get(position));
+                                postBashGoodRate(storyInfos.get(position));
                                 break;
                         }
                         Toast.makeText(context, "Ваш голос учтен", Toast.LENGTH_SHORT).show();
@@ -269,6 +268,22 @@ public class FeedAdapter extends BaseAdapter {
                                 break;
                         }
                         Toast.makeText(context, "Спасибо за неравнодушие", Toast.LENGTH_SHORT).show();
+                        break;
+                    case Constants.SHORTIKI_LOADER:
+                        viewHolder.ibBad.setVisibility(View.INVISIBLE);
+                        viewHolder.ibGood.setVisibility(View.INVISIBLE);
+                        switch (v.getId()) {
+                            case R.id.ibBad:
+                                badClick(viewHolder, position);
+                                postShortikiRate(storyInfos.get(position));
+                                break;
+                            case R.id.ibGood:
+                                goodClick(viewHolder, position);
+                                vote(storyInfos.get(position).getGoodURL());
+                                postShortikiRate(storyInfos.get(position));
+                                break;
+                        }
+                        Toast.makeText(context, "Ваш голос учтен", Toast.LENGTH_SHORT).show();
                         break;
                 }
 
@@ -316,15 +331,15 @@ public class FeedAdapter extends BaseAdapter {
         thread.start();
     }
 
-    private void postBadRate(StoryInfo storyInfo) {
-        postRate(storyInfo, true);
+    private void postBashBadRate(StoryInfo storyInfo) {
+        postBashRate(storyInfo, true);
     }
 
-    private void postGoodRate(StoryInfo storyInfo) {
-        postRate(storyInfo, false);
+    private void postBashGoodRate(StoryInfo storyInfo) {
+        postBashRate(storyInfo, false);
     }
 
-    private void postRate(final StoryInfo storyInfo, final boolean b){
+    private void postBashRate(final StoryInfo storyInfo, final boolean b){
          Thread thread = new Thread(new Runnable() {
               @Override
               public void run() {
@@ -358,6 +373,35 @@ public class FeedAdapter extends BaseAdapter {
           });
           thread.start();
       }
+
+    private void postShortikiRate (final StoryInfo storyInfo){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String id = storyInfo.getStoryNumber().substring(1, storyInfo.getStoryNumber().length());
+                AndroidHttpClient httpClient;
+                httpClient = AndroidHttpClient.newInstance(System.getProperty("http.agent", "Android"), context);
+                HttpPost httpPost = new HttpPost("http://shortiki.com/ajax.php");
+                try {
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                    httpPost.addHeader("Referer",storyInfo.getGoodURL());
+                    nameValuePairs.add(new BasicNameValuePair("action", "doVote"));
+                    nameValuePairs.add(new BasicNameValuePair("id", id));
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+                    HttpResponse response = httpClient.execute(httpPost);
+                    StatusLine s = response.getStatusLine();
+                    System.out.print(s);
+                } catch (ClientProtocolException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }finally {
+                    httpClient.close();
+                }
+            }
+        });
+        thread.start();
+    }
 
 
 }

@@ -23,6 +23,7 @@
         <item>Задолба!ли</item>
         <item>Bash</item>
         <item>KillMePlz</item>
+        <item>Shortiki</item>
     </string-array>
 
     <string-array name="bash_tag">
@@ -43,6 +44,24 @@
         <item>http://bash.im/abyss</item>
         <item>http://bash.im/abysstop</item>
         <item>http://bash.im/abyssbest</item>
+    </string-array>
+
+    <string-array name="shortiki_tag">
+        <item>Новые</item>
+        <item>Лучшие</item>
+        <item>По рейтингу</item>
+        <item>Случайные</item>
+        <item>Бермуды</item>
+        <item>Лучшее Бермуд</item>
+    </string-array>
+
+    <string-array name="shortiki_link">
+        <item>http://shortiki.com/</item>
+        <item>http://shortiki.com/top.php</item>
+        <item>http://shortiki.com/rating.php</item>
+        <item>http://shortiki.com/random.php</item>
+        <item>http://shortiki.com/ball.php</item>
+        <item>http://shortiki.com/btop.php</item>
     </string-array>
 
 </resources>

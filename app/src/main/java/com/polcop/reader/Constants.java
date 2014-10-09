@@ -38,4 +38,7 @@ public class Constants {
     public static final String KILL_ME_PLZ_RANDOM = "http://killpls.me/random/";
     public static final String KILL_ME_PLZ_PAGE = "http://killpls.me/page/";
     public static final String SHORTIKI_LINK = "http://shortiki.com/";
+    public static final String SHORTIKI_BY_RATING = "http://shortiki.com/rating.php";
+    public static final String SHORTIKI_PAGER = "http://shortiki.com/index.php?page=";
+    public static final String SHORTIKI_PAGER_BY_RATE = "http://shortiki.com/rating.php?page=";
 }

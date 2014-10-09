@@ -116,7 +116,8 @@ public class TagExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        if(groupPosition==0||Utils.getLoaderId() == Constants.BASH_LOADER) return new View(context);
+        if(groupPosition==0||Utils.getLoaderId() == Constants.BASH_LOADER||
+                Utils.getLoaderId() == Constants.SHORTIKI_LOADER) return new View(context);
         String headerTitle = (String) getGroup(groupPosition);
         convertView = layoutInflater
                 .inflate(R.layout.drawer_section, null);

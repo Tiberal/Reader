@@ -3,6 +3,8 @@ package com.polcop.reader.background;
 import android.content.Context;
 import android.text.Html;
 
+import com.polcop.reader.Constants;
+import com.polcop.reader.PageInfo;
 import com.polcop.reader.R;
 import com.polcop.reader.StoryInfo;
 import com.polcop.reader.TagInfo;
@@ -60,19 +62,34 @@ public class ShortikiLoader extends BaseQuoteLoader {
 
     @Override
     protected String getMaxPage(Document document) {
+        if(!hasPagination()) return null;
         Element max = document.select("div.pagination").select("a.active").get(0);
         return max.text();
     }
 
     @Override
     protected String getPerviousPage(Document document) {
+        if(!hasPagination()) return null;
         Elements pages = document.select("div.pagination").get(0).children();
         ListIterator<Element> iterator = pages.listIterator();
         while (iterator.hasNext()){
-            if (iterator.next().select("a.active")!=null){
-                return iterator.next().text();
+            int s = iterator.next().select("a.active").size();
+            if (s!=0){
+                if(iterator.hasNext()){
+                    return iterator.next().attr("href");
+                }
+                return null;
             }
         }
     return null;
     }
+
+    private boolean hasPagination(){
+        if(PageInfo.getInstance().getCurrentPage().equals(Constants.SHORTIKI_LINK)||
+                PageInfo.getInstance().getCurrentPage().equals(Constants.SHORTIKI_BY_RATING))
+            return true;
+        else
+            return false;
+    }
+
 }

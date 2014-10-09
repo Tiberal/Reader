@@ -151,14 +151,7 @@ public class FeedAdapter extends BaseAdapter {
         switch (Utils.getLoaderId()) {
             case Constants.IT_HAPPENS_LOADER:
             case Constants.ZADOLBALI_LOADER:
-                viewHolder.ibBad.setVisibility(View.INVISIBLE);
-                viewHolder.ibGood.setVisibility(View.VISIBLE);
-                if (storyInfos.get(position).getGoodURL().equals("")) {
-                    viewHolder.ibGood.setVisibility(View.INVISIBLE);
-                    return;
-                }
-                if (clickInfos.get(position).isGoodClicked)
-                    goodClick(viewHolder, position);
+                onlyGoodRateButton(viewHolder,position);
                 break;
             case Constants.BASH_LOADER:
                 if (PageInfo.getInstance().getCurrentPage().equals(Constants.BASH_ABYSS_TOP)) {
@@ -209,8 +202,28 @@ public class FeedAdapter extends BaseAdapter {
                     viewHolder.ibGood.setVisibility(View.VISIBLE);
                 }
                 break;
+            case Constants.SHORTIKI_LOADER:
+                if(PageInfo.getInstance().getCurrentPage().equals(Constants.SHORTIKI_LINK)){
+                    onlyGoodRateButton(viewHolder,position);
+                }else{
+                    viewHolder.ibBad.setVisibility(View.INVISIBLE);
+                    viewHolder.ibGood.setVisibility(View.INVISIBLE);
+                }
+                break;
         }
 
+    }
+
+    //для шортиков задолбали и итхеппенс одинаковая подготовка рейтинга
+    private void onlyGoodRateButton (ViewHolder viewHolder,int position){
+        viewHolder.ibBad.setVisibility(View.INVISIBLE);
+        viewHolder.ibGood.setVisibility(View.VISIBLE);
+        if (storyInfos.get(position).getGoodURL().equals("")) {
+            viewHolder.ibGood.setVisibility(View.INVISIBLE);
+            return;
+        }
+        if (clickInfos.get(position).isGoodClicked)
+            goodClick(viewHolder, position);
     }
 
     private void createClickListener(final ViewHolder viewHolder, final int position) {

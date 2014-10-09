@@ -135,10 +135,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     }
 
     public void anotherContent(ArrayList<TagInfo> tagInfos){
-        ArrayList<String> temp = new ArrayList<String>();
-        for (int i=0;i<tagInfos.size();i++){
-            temp.add(tagInfos.get(i).getTagTitle());
-        }
         TagExpandableListAdapter adapter = new TagExpandableListAdapter(tagInfos,this);
         drawerLayout.closeDrawers();
         drawerExpandableListView.setAdapter(adapter);
@@ -150,7 +146,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     public boolean onNavigationItemSelected(int position, long id) {
         setCurrentPageInActionBarClickable(true);
         switch (position){
-            case 4:
+            case 0:
                 //Toast.makeText(this,"ItHappens",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
                 showCurrentPageInActionBar("Свежие");
@@ -174,7 +170,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                 showCurrentPageInActionBar("Новые");
                 switchContent(Constants.KILL_ME_PLZ_LINK, Constants.KILL_ME_PLZ_LOADER);
                 break;
-            case 0:
+            case 4:
                 //Toast.makeText(this,"Shortiki",Toast.LENGTH_SHORT).show();
                 PageInfo.getInstance().setCurrentPage(Constants.SHORTIKI_LINK);
                 showCurrentPageInActionBar("Новые");
@@ -209,6 +205,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
                 case Constants.KILL_ME_PLZ_LOADER:
                     killMePlzClick(groupPosition,childPosition);
                     break;
+                case Constants.SHORTIKI_LOADER:
+                    shortikiClick(childPosition);
+                    break;
             }
             return true;
         }
@@ -217,6 +216,18 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
             return false;
         }
+    }
+
+    private void shortikiClick(int childPosition) {
+        if(childPosition==0||childPosition==2){
+            setCurrentPageInActionBarClickable(true);
+        }else{
+            setCurrentPageInActionBarClickable(false);
+        }
+        PageInfo.getInstance().setCurrentPage(PageInfo.getInstance().getTagInfos().get(childPosition).getTagURL());
+        showCurrentPageInActionBar(PageInfo.getInstance().getTagInfos().get(childPosition).getTagTitle());
+        switchContent(PageInfo.getInstance().getTagInfos().get(childPosition).getTagURL(),Constants.SHORTIKI_LOADER);
+
     }
 
     private void itHappensAndZadolbaliClick(int groupPosition, int childPosition, int loaderId){
@@ -228,7 +239,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         if (groupPosition==0){
             switch (childPosition){
                 case 0:
-                    //todo if before switch
                     if (loaderId==Constants.IT_HAPPENS_LOADER)
                         PageInfo.getInstance().setCurrentPage(Constants.IT_HAPPENS_LINK);
                     else

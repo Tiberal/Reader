@@ -103,6 +103,15 @@ public class Feed extends Fragment {
                         else
                             loadLink = PageInfo.getInstance().getCurrentPage()+"/"+PageInfo.getInstance().getPreviousPage();
                         break;
+                    case Constants.SHORTIKI_LOADER:
+                        if(PageInfo.getInstance().getCurrentPage().equals(Constants.SHORTIKI_LINK)||
+                                PageInfo.getInstance().getCurrentPage().equals(Constants.SHORTIKI_BY_RATING))
+                            loadLink = PageInfo.getInstance().getPreviousPage();
+                        else {
+                            listView.removeLoadingFooterView();
+                            return;
+                        }
+                        break;
                 }
 
                 if(!Utils.isOnline()){
@@ -124,7 +133,6 @@ public class Feed extends Fragment {
             loadData(arg.getString(Constants.LINK),arg.getInt(Constants.LOADER_ID));
             firstLoad=false;
         }else{
-            //todo после возвращения из дома если есть истории показить их
             //отобразить ленту если был возрат с одиночной истории
             listView.updateFeedListView(loadersControl.getAdapter());
         }

@@ -59,6 +59,9 @@ public class PageObserver {
             case Constants.KILL_ME_PLZ_LOADER:
                 selectPageByNumber();
                 break;
+            case Constants.SHORTIKI_LOADER:
+                selectPageByNumber();
+                break;
         }
 
     }
@@ -245,6 +248,13 @@ public class PageObserver {
                         arg.putString(Constants.LINK, Constants.KILL_ME_PLZ_PAGE + newPage);
                     }else{
                         arg.putString(Constants.LINK,PageInfo.getInstance().getCurrentPage() + "/" + newPage);
+                    }
+                    break;
+                case Constants.SHORTIKI_LOADER:
+                    if(Constants.SHORTIKI_LINK.equals(PageInfo.getInstance().getCurrentPage())){
+                        arg.putString(Constants.LINK, Constants.SHORTIKI_PAGER + newPage);
+                    }else{
+                        arg.putString(Constants.LINK, Constants.SHORTIKI_PAGER_BY_RATE + newPage);
                     }
                     break;
             }
